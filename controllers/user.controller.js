@@ -14,6 +14,13 @@ module.exports.registerUser = async (req, res, next) =>{
     const isBlacklisted = await userModel.findOne({ blacklistTokenModel: token });
 
     const {fullname, email, password} =req.body;
+    
+    const isUserAlready = await userModel.findOne({ email });
+    if(isUserAlready){
+        return res.status(400).json({
+            message:' User already exist '
+        });
+    }
 
     const hashedPassword = await userModel.hashedPassword(password);
 

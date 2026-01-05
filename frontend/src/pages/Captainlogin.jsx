@@ -1,20 +1,36 @@
 import React, { useState } from 'react';
 import { FaGripfire } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowRight } from "react-icons/fa";
+import { CaptainDataContext } from '../contaxt/CaptanContext';
+import axios from 'axios';
 
   const Captainlogin = () => {
   const [ email, setEmail ] = useState('');
   const [ password, setPasword  ] = useState('');
   const [captainData, setCaptainData] = useState({});
 
-  const submitHandler = (e) =>{
-    e.preventDefault();
-    setCaptainData({
-      email:email,
-      password:password
-    });
-   
+  const navigate=useNavigate();
+  const {captain,setCaptain} = React.useContext(CaptainDataContext);
+  
+  const submitHandler = async(e) =>{
+     e.preventDefault();
+
+     const captainData={
+           email:email,
+           password 
+     }
+
+     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`,captainData);
+        
+     
+     if(response.status === 200){
+      const data=response.data;
+      setCaptain(data.captain);
+      localStorage.setItem('token',data.token);
+      navigate('/captain-home');
+     }
+       
     setEmail('');
     setPasword('');
   }
@@ -22,30 +38,28 @@ import { FaArrowRight } from "react-icons/fa";
   return (
    <div className='py-7 px-5 flex flex-col justify-between'>
            <div>            
-            <div className="logo flex items-center mb-10">
+           <div className="logo flex items-center mb-10">
                    <FaGripfire className='text-[35px] text-red-500 '/>
                    <h1 className='inter-harsh2 text-[35px] text-orange-500'>
                      A< span className='text-black' >ber</span >
                    </h1>
-                    <FaArrowRight class='relative top-10 right-25 text-[20px]'/>
-                
-            </div>
-                  
+                    <FaArrowRight className='relative top-10 right-25 text-[20px]'/>
+           </div>               
                    
              
            <form onSubmit={(e)=>{
              submitHandler(e);
            }}>
-               <h3 className='text-lg font-medium mb-2'>What's your email</h3>
+               <h3 className='text-lg font-medium mb-2'>What's our Captain's email</h3>
                <input required 
                value={email}
                onChange={(e)=>{
                  setEmail(e.target.value);
-               }}
+           }}
                className='bg-[#eeeeee] rounded px-4 py-2  w-full text-lg mb-5 placeholder:text-base'
                type="email"
                placeholder='Enter your email'
-               />
+          />
    
                <h3 className='font-medium text-lg mb-2'>Enter Password</h3>
                <input required

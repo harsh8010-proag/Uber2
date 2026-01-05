@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { FaGripfire } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowRight } from "react-icons/fa";
+import { UserDataContext } from '../contaxt/UserContext'; 
+import axios from 'axios';
+ 
 
 const UserSignup = () => {  
 
@@ -10,19 +13,36 @@ const UserSignup = () => {
   const [ firstName, setFitstName ] = useState('');
   const [ lastName, setLastName] = useState('');
   const [ userData, setUserData] = useState('');
-    const submitHandler = (e) =>{
+
+  const navigate = useNavigate();
+
+  const { user, setUser } = React.useContext(UserDataContext);
+    const submitHandler = async(e) =>{
       e.preventDefault();
 
-      setUserData({
-        username:{
-          firstName:firstName,
-          lastName:lastName
+      const newUser = {
+        fullname:{
+          firstname:firstName,
+          lastname:lastName
         },
         email:email,
         password:password
-      })
+      }
+    
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser)
+    
+      if(response.status === 201 ){
+        const data = response.data;
+        
+           setUser(data.user);
+     
+        localStorage.setItem('token',data.token);
+     
+      
+        navigate('/home');
+      }
 
-console.log(userData);
+
       setEmail('');
       setFitstName('');
       setLastName('');
@@ -94,7 +114,7 @@ console.log(userData);
 
                    <button
                    className='bg-[#111] text-white font-semibold  px-4 py-2 w-full '
-                   >Login</button>
+                   >Create account</button>
                <p className='text-center mb-10'>Already have a account?<Link to='/login' className='text-blue-600 '>Login here</Link></p> 
                </form>
                </div>

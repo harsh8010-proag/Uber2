@@ -5,9 +5,10 @@ import gsap from "gsap";
 import {useGSAP} from '@gsap/react';
 import LocationSearchPanel from '../components/LocationSearchPanel';
 import VehiclePanel from '../components/VehiclePanel';
-import ConfirmRidePopUp from '../components/ConfirmRidePopUp';
+
 import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
+import ConfirmRide from '../components/ConfirmRide';
 
 const home = () => {
 
@@ -142,7 +143,7 @@ useGSAP(function(){
               </img>
   
        </div>
-       <div className='  flex flex-col justify-end h-screen absolute top-0 w-full'>
+       <div className='flex flex-col justify-end h-screen absolute top-0 w-full'>
        
        <div className='h-[30%] p-6 bg-white relative'>
         <h5 ref={panelCloseRef} onClick={()=>{
@@ -192,7 +193,7 @@ useGSAP(function(){
                 <div 
           ref={confirmRidePanelRef}
           className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 translate-y-full'>
-            <ConfirmRidePopUp setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound}/>
+            <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound}/>
           </div>
 
                 <div  

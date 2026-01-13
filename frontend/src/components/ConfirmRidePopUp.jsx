@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 const ConfirmRidePopUp = (props) => {
+    
+    let [otp,setOtp] = useState('');
   return (
     <div > 
-            < h5 className='p-1 text-center w-[93%] absolute top-0'
-                onClick={() => { props.setRidePopupPanel(false); }}><i className="text-3xl text-gray-200 ri-arrow-down-wide-line"></i></h5>
-            <h3 className='text-2xl font-semibold mb-3'>New Ride Available</h3>
+    <h5 className='p-1 text-center w-[93%] absolute top-0'
+        onClick={() => { props.setRidePopupPanel(false); }}><i className="text-3xl text-gray-200 ri-arrow-down-wide-line"></i></h5>
+          <h3 className='text-2xl font-semibold mb-3'>New Ride Available</h3>
 
             <div className='flex items-center justify-between mt-4 p-3 bg-yellow-400 rounded-lg'>
                 <div className='flex items-center gap-3 '>
@@ -46,18 +49,27 @@ const ConfirmRidePopUp = (props) => {
                         </div>
 
                     </div>
-                    <button
 
+                    <div className='mt-6 w-full'>
+                        <form onSubmit={(e)=>{
+                            submitHandler(e)
+                        }}>
+
+                    <input  value={otp} type="text" placeholder='Enter OTP' className='text-lg bg-[#eee] px-6 py-4 text-base rounded-lg w-full mt-3 font-mono'  />
+                    <Link   to='/captain-riding'
                         onClick={() => {
                          
                         }}
-                        className='w-full mt-5 bg-green-600 font-semibold p-2 rounded-lg text-white'>Confirm</button>
+                        className='w-full block text-center mt-5 bg-green-600 font-semibold p-3 rounded-lg text-white'>Confirm</Link>
 
                     <button
                         onClick={() => { 
                          props.setConfirmRidePopupPanel(false);
                          }}
-                        className='w-full mt-4 bg-gray-300 font-semibold p-2 rounded-lg text-gray-700'>Cancel</button>
+                        className='w-full trxt-lg mt-4 bg-red-300 font-semibold p-3 rounded-lg text-gray-700'>Cancel</button>
+                        </form>
+                        </div>
+                        
                 </div>
             </div>
         </div>

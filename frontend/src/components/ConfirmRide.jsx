@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ConfirmRidePopUp = (props) => {
+const ConfirmRide = (props) => {
   return (
     <div>
       < h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
@@ -29,26 +29,26 @@ const ConfirmRidePopUp = (props) => {
             </div>
 
           </div>
-        
-        <div className='flex items-center gap-5 p-3  '>
-          <i className="text-lg  text-green-700 ri-cash-line"></i>
 
-          <div >
-            <h3 className='text-lg font-medium'>₹193.20</h3>
-            <p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>
+          <div className='flex items-center gap-5 p-3  '>
+            <i className="text-lg  text-green-700 ri-cash-line"></i>
+
+            <div >
+              <h3 className='text-lg font-medium'>₹193.20</h3>
+              <p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>
+            </div>
+
           </div>
-
+          <button
+            onClick={() => {
+              props.setVehicleFound(true);
+              props.setConfirmRidePanel(false);
+            }}
+            className='w-full mt-5 bg-green-600 font-semibold p-2 rounded-lg text-white'>Confirm</button>
         </div>
-        <button 
-        onClick={()=>{
-          props.setVehicleFound(true);
-           props.setConfirmRidePanel(false);
-        }}
-        className='w-full mt-5 bg-green-600 font-semibold p-2 rounded-lg text-white'>Confirm</button>
       </div>
-    </div>
     </div>
   )
 }
 
-export default ConfirmRidePopUp;
+export default ConfirmRide;

@@ -16,7 +16,7 @@ const CaptainProtectWrapper = ({
 
      useEffect(()=>{
       if(!token){
-        navigate('/captain-login')
+        navigate('/captain-login');
      }},[token])
 
      axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`,{
@@ -44,7 +44,7 @@ const CaptainProtectWrapper = ({
 
 
   return (
-    <div>
+    <div>                  
         {children}          
     </div>
   )

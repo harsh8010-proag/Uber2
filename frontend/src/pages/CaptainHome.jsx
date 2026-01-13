@@ -13,9 +13,9 @@ import ConfirmRidePopUp from '../components/ConfirmRidePopUp';
 const CaptainHome = () => {
  
   const [RidePopUpPanel, setRidePopupPanel] = useState(true);
-  const [confirmRidePopupPanel,setConfirmRidePopupPanel]=useState(false)
+  const [confirmRidePopupPanel,setConfirmRidePopupPanel]=useState(false);
   const RidePopUpPanelRef = useRef(null);
-  const ConfirmRidePopupPanelRef = useRef(null)
+  const ConfirmRidePopupPanelRef = useRef(null);
 
   useGSAP(function(){
         if(RidePopUpPanel){

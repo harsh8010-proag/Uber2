@@ -13,7 +13,7 @@ const rideRoutes     = require('./routes/ride.routes');
 connectToDb();
 app.use(express.json());    
 app.use(cors());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
  
 

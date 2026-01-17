@@ -44,7 +44,7 @@ module.exports.getDistanceTime = async(origin, destination) =>{
     
     try{
          const response = await axios.get(url);
-         console.log(response)
+        //  console.log(response)
          if(response.data.status === 'OK'){
 
             if(response.data.rows[ 0 ].elements[ 0 ].status === 'ZERO_RESULTS'){
@@ -76,7 +76,7 @@ module.exports.getAutoCompleteSuggestions = async (input) =>{
     try{
         const response = await axios.get(url);
         if(response.data.status === 'OK'){
-            console.log(response.data.predictions);
+          
 
             return response.data.predictions.map(prediction => prediction.description).filter(value => value);
         }else{
@@ -84,7 +84,7 @@ module.exports.getAutoCompleteSuggestions = async (input) =>{
         }
 
     }catch(err){
-     console.error(err);
+     
      throw err;
     }
 }
@@ -95,7 +95,7 @@ module.exports.getCaptainsInTheRadius = async (ltd,lng,radius) =>{
     const captains = await captainModel.find({
         location:{
             $geoWithin :{
-                $centreSphere: [ [ ltd, lng ], radius/ 6371 ]
+                $centerSphere: [ [ ltd, lng ], radius/ 6371 ]
             }
         }
     })

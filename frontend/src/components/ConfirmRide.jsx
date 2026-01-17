@@ -1,6 +1,16 @@
 import React from 'react';
 
 const ConfirmRide = (props) => {
+
+   let vehicleimage='';
+  if(props.vehicleType === 'car'){
+    vehicleimage='https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=956/height=538/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yOWZiYjhiMC03NWIxLTRlMmEtODUzMy0zYTM2NGU3MDQyZmEucG5n'
+  }else if(props.vehicleType === 'moto'){
+    vehicleimage='https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=368/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yYzdmYTE5NC1jOTU0LTQ5YjItOWM2ZC1hM2I4NjAxMzcwZjUucG5n'
+   }else{
+     vehicleimage='https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=368/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8xZGRiOGM1Ni0wMjA0LTRjZTQtODFjZS01NmExMWEwN2ZlOTgucG5n'
+   }  
+  
   return (
     <div>
       < h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
@@ -10,14 +20,14 @@ const ConfirmRide = (props) => {
       <div className='flex gap-2 flex-col justify-between items-center'>
         <img
           className='h-20'
-          src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=956/height=538/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yOWZiYjhiMC03NWIxLTRlMmEtODUzMy0zYTM2NGU3MDQyZmEucG5n" alt="car" />
+          src={vehicleimage}  alt="car" />
         <div className='w-full mt-5'>
           <div className='flex items-center gap-5 p-3 border-b-2 border-gray-500'>
 
             <i className="ri-map-pin-user-fill text-lg"></i>
             <div >
               <h3 className='text-lg font-medium'>562/11-A</h3>
-              <p className='text-sm -mt-1 text-gray-600'>Kankariya Talab, Bhopal </p>
+              <p className='text-sm -mt-1 text-gray-600'>{props.pickup} </p>
             </div>
           </div>
 
@@ -25,7 +35,7 @@ const ConfirmRide = (props) => {
             <i className="text-lg ri-map-pin-fill"></i>
             <div >
               <h3 className='text-lg font-medium'>562/11-A</h3>
-              <p className='text-sm -mt-1 text-gray-600'>Kankariya Talab, Bhopal </p>
+              <p className='text-sm -mt-1 text-gray-600'>{props.destination}</p>
             </div>
 
           </div>
@@ -34,7 +44,7 @@ const ConfirmRide = (props) => {
             <i className="text-lg  text-green-700 ri-cash-line"></i>
 
             <div >
-              <h3 className='text-lg font-medium'>₹193.20</h3>
+              <h3 className='text-lg font-medium'>₹{props.fare[ props.vehicleType]}</h3>
               <p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>
             </div>
 
@@ -43,6 +53,7 @@ const ConfirmRide = (props) => {
             onClick={() => {
               props.setVehicleFound(true);
               props.setConfirmRidePanel(false);
+              props.createRide();
             }}
             className='w-full mt-5 bg-green-600 font-semibold p-2 rounded-lg text-white'>Confirm</button>
         </div>

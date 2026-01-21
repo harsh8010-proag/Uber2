@@ -48,7 +48,7 @@ module.exports.loginUser =async (req, res, next)=>{
    
     
     const user =await userModel.findOne({ email }).select("+password"); 
-     console.log(user);
+    
     if(!user){
          return res.status(401).json({ message: 'Invalid Email or password'});
     }

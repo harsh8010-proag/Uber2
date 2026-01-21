@@ -33,8 +33,14 @@ const UserSignup = () => {
     
       if(response.status === 201 ){
         const data = response.data;
-        
-           setUser(data.user);
+        const user = data.user;
+           setUser({
+    email: user.email,
+    fullname: {
+      firstname: user.fullname.firstName,
+      lastname: user.fullname.lastName
+    }
+  });
      
         localStorage.setItem('token',data.token);
      

@@ -7,14 +7,17 @@ import UserContext from './contaxt/UserContext.jsx'
 import CaptanContext from './contaxt/CaptanContext.jsx'
 import gsap from "gsap";
 import {useGSAP} from '@gsap/react';
+import SocketProvider from './contaxt/SocketContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <CaptanContext>
     <UserContext>
+      <SocketProvider>
     <BrowserRouter>
-    <App />
+      <App />
     </BrowserRouter>
+    </SocketProvider>
     </UserContext>
     </CaptanContext>
   </StrictMode>,

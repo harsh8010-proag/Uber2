@@ -17,14 +17,15 @@ const CaptainProtectWrapper = ({
      useEffect(()=>{
       if(!token){
         navigate('/captain-login');
-     }},[token])
+     }
 
-     axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`,{
+       axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`,{
         headers:{
             Authorization : `Bearer ${token}`
         }
      }).then(response => {
         if(response.status === 200){
+            console.log(response)
             setCaptain(response.data.captain)
             setIsLoading(false);
         }
@@ -33,6 +34,11 @@ const CaptainProtectWrapper = ({
         localStorage.removeItem('token');
         navigate('/captain-login')
      })
+    
+    
+    },[token])
+
+   
 
      if(isLoading){
         return(

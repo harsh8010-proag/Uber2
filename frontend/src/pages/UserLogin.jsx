@@ -27,7 +27,15 @@ import axios from 'axios';
      
     if(response.status === 200){
      
-      setUser(data.user)
+      const user = data.user;
+           setUser({
+    email: user.email,
+    fullname: {
+      firstname: user.fullname.firstName,
+      lastname: user.fullname.lastName
+    }
+  });
+
       localStorage.setItem('token',data.token);
       navigate('/home');
     }

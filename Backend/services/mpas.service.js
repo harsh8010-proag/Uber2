@@ -5,20 +5,20 @@ const captainModel = require('../models/captain.model');
 module.exports.getAddressCoordinate = async(address) =>{
 
     const apiKey = process.env.GOOGLE_MAPS_API;
-    console.log(apiKey);
+     
     const url    = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
 
     try{
         const response = await axios.get(url);
-        console.log(response)
+ 
 
         if(response.data.status === 'OK'){
             const location = response.data.results[0].geometry.location;
           
 
             return{
-                Itd: location.lat,
-                Ing: location.lng
+                ltd: location.lat,
+                lng: location.lng
             }
         }else{
             throw new Error('Unable to fetch coordinates');
@@ -26,7 +26,7 @@ module.exports.getAddressCoordinate = async(address) =>{
     
     
     }catch(error){
-    console.error(error);
+ 
     throw error;
 
     }
@@ -44,7 +44,7 @@ module.exports.getDistanceTime = async(origin, destination) =>{
     
     try{
          const response = await axios.get(url);
-        //  console.log(response)
+     
          if(response.data.status === 'OK'){
 
             if(response.data.rows[ 0 ].elements[ 0 ].status === 'ZERO_RESULTS'){
@@ -77,7 +77,6 @@ module.exports.getAutoCompleteSuggestions = async (input) =>{
         const response = await axios.get(url);
         if(response.data.status === 'OK'){
           
-
             return response.data.predictions.map(prediction => prediction.description).filter(value => value);
         }else{
             throw new Error('Unable to fetch suggestions');
@@ -91,14 +90,17 @@ module.exports.getAutoCompleteSuggestions = async (input) =>{
 
 module.exports.getCaptainsInTheRadius = async (ltd,lng,radius) =>{
     //radius in km 
+    console.log(`PicupCordinates ltd:${ltd}: lng:${lng}`)
    
-    const captains = await captainModel.find({
-        location:{
-            $geoWithin :{
-                $centerSphere: [ [ ltd, lng ], radius/ 6371 ]
+  const captains = await captainModel.find({
+        "vehicle.location": {  
+            $geoWithin: {
+                $centerSphere: [ 
+                    [ parseFloat(lng), parseFloat(ltd) ],  
+                    radius / 6378.1 
+                ]
             }
         }
-    })
-
+    });
     return captains;
 }

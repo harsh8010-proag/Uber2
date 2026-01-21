@@ -1,17 +1,19 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaGripfire } from 'react-icons/fa';
 import 'remixicon/fonts/remixicon.css';
 import gsap from "gsap";
 import {useGSAP} from '@gsap/react';
 import LocationSearchPanel from '../components/LocationSearchPanel';
 import VehiclePanel from '../components/VehiclePanel';
-
 import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
 import ConfirmRide from '../components/ConfirmRide';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { SocketContext } from '../contaxt/SocketContext';
+import UserContext, { UserDataContext } from '../contaxt/UserContext';
 
-const home = () => {
+  const home = () => {
 
   const [pickup, setPickup] = useState('');
   const [destination, setDestination ] = useState('');
@@ -22,11 +24,11 @@ const home = () => {
   const [ destinationSuggestions, setDestinationSuggestions ] = useState([])
   const [ activeField , setActiveField ] =useState(null);
   const [ vehicleType, setVehicleType] =useState('');
-  const [fare,setFare] =useState({})
-
+  const [fare,setFare] =useState({});
+  const [ride,setRide] = useState(null);
 
   const [vehicleFound, setVehicleFound] = useState(false);
-    const [waitingForDriver, setWaitingForDriver] = useState(false);
+  const [waitingForDriver, setWaitingForDriver] = useState(false);
 
   const vehiclePanelRef = useRef(null);
   const confirmRidePanelRef = useRef(null);
@@ -34,12 +36,21 @@ const home = () => {
   const panelRef = useRef(null);
   const vehicleFoundRef = useRef(null);
   const WaitingForDriverRef = useRef(null);
-
   
+  const navigate = useNavigate();
+  const {socket} =useContext(SocketContext);
+  const { user } =useContext(UserDataContext);
+  console.log(user._id);
 
+  useEffect(()=>{
+    socket.emit("join",{userType:"user",userId:user._id})
+  },[ user ]);
+
+   
+ 
   
 const handlePickupChange = async (e) => {
-        setPickup(e.target.value)
+        setPickup(e.target.value);
         try {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
                 params: { input: e.target.value },
@@ -55,11 +66,11 @@ const handlePickupChange = async (e) => {
     }
 
     const handleDestinationChange = async (e) => {
-        setDestination(e.target.value)
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
-                params: { input: e.target.value },
-                headers: {
+      setDestination(e.target.value);
+      try {
+           const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,{
+              params: { input: e.target.value },
+              headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             })
@@ -107,7 +118,7 @@ const handlePickupChange = async (e) => {
         }
        
 
-    },[vehiclePanel])
+    },[vehiclePanel]);
 
      
     
@@ -250,10 +261,10 @@ useGSAP(function(){
        ref={panelRef}
        className='bg-white h-0 '>
          <LocationSearchPanel 
-         suggestions = {activeField === 'pickup' ? pickupSuggestions : destinationSuggestions}
-         vehiclePanel={vehiclePanel} 
-         setPanelOpen={setPanelOpen}
-         setVehiclePanel={setVehiclePanel}
+          suggestions = {activeField === 'pickup' ? pickupSuggestions : destinationSuggestions}
+          vehiclePanel={vehiclePanel} 
+          setPanelOpen={setPanelOpen}
+          setVehiclePanel={setVehiclePanel}
           setDestination={setDestination}
           setPickup={setPickup}
           activeField={activeField}
@@ -264,7 +275,7 @@ useGSAP(function(){
             
           <div 
           ref={vehiclePanelRef}
-          className='fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-12 translate-y-full'>
+            className='fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-12 translate-y-full'>
             <VehiclePanel 
             setVehiclePanel={setVehiclePanel}
             selectVehicle={setVehicleType}
@@ -274,32 +285,32 @@ useGSAP(function(){
           </div>
                 <div 
           ref={confirmRidePanelRef}
-          className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 translate-y-full'>
+           className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 translate-y-full'>
             <ConfirmRide 
             createRide={createRide}
             pickup={pickup}
             destination={destination}
             fare = {fare}
             vehicleType ={vehicleType}
-
             setConfirmRidePanel={setConfirmRidePanel} 
             setVehicleFound={setVehicleFound} />
+
           </div>
 
                 <div  
                 ref={vehicleFoundRef}     
-          className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 translate-y-full'>
-            <LookingForDriver 
+             className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 translate-y-full'>
+             <LookingForDriver 
              pickup={pickup}
-            destination={destination}
+             destination={destination}
              fare = {fare}
-            vehicleType ={vehicleType}
-            setVehicleFound={setVehicleFound} setWaitingForDriver={setWaitingForDriver}/>
+             vehicleType ={vehicleType}
+             setVehicleFound={setVehicleFound} setWaitingForDriver={setWaitingForDriver}/>
           </div>
 
              <div  
              ref={WaitingForDriverRef}       
-          className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 '>
+             className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 '>
             <WaitingForDriver setWaitingForDriver={setWaitingForDriver}/>
           </div>
 

@@ -21,7 +21,7 @@ import UserContext, { UserDataContext } from '../contaxt/UserContext';
   const [vehiclePanel , setVehiclePanel] = useState(false);
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
-  const [ destinationSuggestions, setDestinationSuggestions ] = useState([])
+  const [ destinationSuggestions, setDestinationSuggestions ] = useState([]);
   const [ activeField , setActiveField ] =useState(null);
   const [ vehicleType, setVehicleType] =useState('');
   const [fare,setFare] =useState({});
@@ -40,13 +40,24 @@ import UserContext, { UserDataContext } from '../contaxt/UserContext';
   const navigate = useNavigate();
   const {socket} =useContext(SocketContext);
   const { user } =useContext(UserDataContext);
-  console.log(user._id);
+ 
 
   useEffect(()=>{
-    socket.emit("join",{userType:"user",userId:user._id})
+    socket.emit("join",{userType:"user",userId:user._id});
   },[ user ]);
 
-   
+  socket.on('ride-confirmed', ride =>{
+    setVehicleFound(false);
+    setWaitingForDriver(true);
+    setRide(ride);
+    
+  })  
+
+      socket.on('ride-started', ride => {
+    
+        setWaitingForDriver(false)
+        navigate('/riding', { state: { ride } })  
+    })
  
   
 const handlePickupChange = async (e) => {
@@ -311,7 +322,9 @@ useGSAP(function(){
              <div  
              ref={WaitingForDriverRef}       
              className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 '>
-            <WaitingForDriver setWaitingForDriver={setWaitingForDriver}/>
+            <WaitingForDriver 
+            ride={ride}
+            setWaitingForDriver={setWaitingForDriver}/>
           </div>
 
     </div>

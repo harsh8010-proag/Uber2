@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaGripfire } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import 'remixicon/fonts/remixicon.css';
 import FinishRide from './FinishRide';
 import { useRef } from 'react';
@@ -11,6 +11,8 @@ const CaptainRiding = () => {
 
   const [finishRidePanel,setFinishRidePanel] = useState(false);
   const finishRidePanelRef = useRef(null);
+  const location = useLocation();
+  const rideData = location.state?.ride
 
   useGSAP(function(){
       if(finishRidePanel){
@@ -28,15 +30,10 @@ const CaptainRiding = () => {
 
   return (
    <div className='h-screen'>
-        <div className='flex w-full items-center justify-between  fixed'>
-          <div className="logo flex text-2xl items-center  bg-gray-300/60  m-2 px-2 rounded-[5px]">
-            <FaGripfire className=' text-red-500 ' />
-            <h1 className='inter-harsh2  text-orange-500 '>
-              A<span className='text-black'>ber</span>
-            </h1>
-          </div>
+        <div className='flex w-full items-center justify-end  fixed'>
+       
           <Link to={'/home'} className='m-2 text-white  h-10 w-10 bg-gray-700/70 flex items-center justify-center rounded-full'>
-            <i className="text-lg ri-logout-box-r-line"></i>
+            <i className="text-lg ri-home-5-line"></i>
           </Link>
         </div>
         <div className="h-4/5">
@@ -63,7 +60,10 @@ const CaptainRiding = () => {
           <div
       ref={finishRidePanelRef}
       className='fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-12 translate-y-full '> 
-       <FinishRide setFinishRidePanel={setFinishRidePanel}  />
+       <FinishRide 
+       ride={rideData}
+        
+       setFinishRidePanel={setFinishRidePanel}  />
       </div>
 
   

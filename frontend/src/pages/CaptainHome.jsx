@@ -11,6 +11,7 @@ import ConfirmRide from '../components/ConfirmRide';
 import ConfirmRidePopUp from '../components/ConfirmRidePopUp';
 import { SocketContext } from '../contaxt/SocketContext';
 import { CaptainDataContext } from '../contaxt/CaptanContext';
+import axios from 'axios';
 
 const CaptainHome = () => {
  
@@ -62,6 +63,20 @@ useEffect(() => {
 }, []);
 
 
+async function confirmRide(){
+     
+  const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`,{
+    rideId: ride._id,
+    captain: captain._id,
+  },{
+    headers:{
+      Authorization : `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+  
+   
+}
+
 
   useGSAP(function(){
         if(RidePopUpPanel){
@@ -96,8 +111,8 @@ useEffect(() => {
             A<span className='text-black'>ber</span>
           </h1>
         </div>
-        <Link to={'/home'} className='m-2 text-white  h-10 w-10 bg-gray-700/70 flex items-center justify-center rounded-full'>
-          <i className="text-lg ri-logout-box-r-line"></i>
+        <Link to={'/captain-home'} className='m-2 text-white  h-10 w-10 bg-gray-700/70 flex items-center justify-center rounded-full'>
+          <i className="text-lg ri-home-4-line"></i>
         </Link>
       </div>
       <div className="h-3/5">
@@ -116,7 +131,9 @@ useEffect(() => {
        <RidePopUp 
        ride={ride}
        setRidePopupPanel={setRidePopupPanel}
-        setConfirmRidePopupPanel={setConfirmRidePopupPanel} />
+        setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+        confirmRide={confirmRide}
+        />
       </div>
 
        <div

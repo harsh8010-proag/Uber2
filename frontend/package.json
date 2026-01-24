@@ -11,12 +11,14 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@react-google-maps/api": "^2.20.8",
     "axios": "^1.13.2",
     "gsap": "^3.14.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.10.1",
+    "react-toastify": "^11.0.5",
     "remixicon": "^4.8.0",
     "socket.io-client": "^4.8.3"
   },

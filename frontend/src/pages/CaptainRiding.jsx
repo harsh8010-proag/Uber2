@@ -6,6 +6,7 @@ import FinishRide from './FinishRide';
 import { useRef } from 'react';
 import gsap from "gsap";
 import {useGSAP} from '@gsap/react';
+import LiveTracking from '../components/LiveTracking';
 
 const CaptainRiding = () => { 
 
@@ -38,9 +39,7 @@ const CaptainRiding = () => {
         </div>
         <div className="h-4/5">
         
-          <img
-            className='h-full w-full object-cover'
-            src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="map" />
+          <LiveTracking/>
         </div>
   
         <div 

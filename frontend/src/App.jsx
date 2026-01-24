@@ -14,6 +14,9 @@ import CaptainProtectWrapper from './pages/CaptainProtectWrapper';
 import Riding from './pages/Riding';
 import CaptainRiding from './pages/CaptainRiding';
 import CaptainLogout from './pages/CaptainLogout';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const App = () => {
 
@@ -22,7 +25,9 @@ const App = () => {
   return (
 
     <div>
+      <ToastContainer position="top-center" style={{ zIndex: 9999 }} />
       <Routes>
+   
         <Route path='/' element={<Start />} />
         <Route path='/home' element={
           <UserProtectWrapper>

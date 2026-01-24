@@ -3,6 +3,7 @@ import { FaGripfire } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowRight } from "react-icons/fa";
 import { UserDataContext } from '../contaxt/UserContext'; 
+import { toast } from 'react-toastify';
 import axios from 'axios';
  
 
@@ -12,7 +13,8 @@ const UserSignup = () => {
   const [ password, setPassword ]= useState('');
   const [ firstName, setFitstName ] = useState('');
   const [ lastName, setLastName] = useState('');
-  const [ userData, setUserData] = useState('');
+ 
+  const [serverError, setServerError] = useState('');
 
   const navigate = useNavigate();
 
@@ -28,7 +30,8 @@ const UserSignup = () => {
         email:email,
         password:password
       }
-    
+      
+      try{
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser)
     
       if(response.status === 201 ){
@@ -37,13 +40,19 @@ const UserSignup = () => {
            setUser({
     email: user.email,
     fullname: {
-      firstname: user.fullname.firstName,
-      lastname: user.fullname.lastName
+      firstname: user.fullname.firstname,
+      lastname: user.fullname.lastname
     }
   });
      
         localStorage.setItem('token',data.token);
      
+         toast.success("Registration successful! Welcome 🎉", {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored",
+        });
+
       
         navigate('/home');
       }
@@ -53,6 +62,23 @@ const UserSignup = () => {
       setFitstName('');
       setLastName('');
       setPassword('');
+    }catch (error){
+      //servre validation error
+    if(error.response && error.response.data){
+      // Exprss validator errors, display first message
+      if(error.response.data.errors){
+    setServerError(error.response.data.errors[0].msg);
+      }else if(error.response.data.message){
+        //other custome backend Error
+      setServerError(error.response.data.message);
+    }else{
+      setServerError('unkown error occured.')
+    }
+    } else {
+      setServerError('Network error');
+    }
+     
+    }
      }
   return (
     <div className='p-7 flex flex-col justify-between'>
@@ -117,7 +143,9 @@ const UserSignup = () => {
                    }}
                    className='bg-[#eeeeee] rounded px-4 py-2  w-full text-lg mb-5 placeholder:text-same'
                    />
-
+                     {serverError && (
+    <p className="text-sm text-red-500 mb-3">{serverError}</p>
+  )}
                    <button
                    className='bg-[#111] text-white font-semibold  px-4 py-2 w-full '
                    >Create account</button>

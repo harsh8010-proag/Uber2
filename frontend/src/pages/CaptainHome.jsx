@@ -12,6 +12,7 @@ import ConfirmRidePopUp from '../components/ConfirmRidePopUp';
 import { SocketContext } from '../contaxt/SocketContext';
 import { CaptainDataContext } from '../contaxt/CaptanContext';
 import axios from 'axios';
+import LiveTracking from '../components/LiveTracking';
 
 const CaptainHome = () => {
  
@@ -116,9 +117,7 @@ async function confirmRide(){
         </Link>
       </div>
       <div className="h-3/5">
-        <img
-          className='h-full w-full object-cover'
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="map" />
+      <LiveTracking/>
       </div>
 
       <div className='h-2/5 p-6'>

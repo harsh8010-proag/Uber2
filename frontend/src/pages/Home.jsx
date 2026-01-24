@@ -12,6 +12,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { SocketContext } from '../contaxt/SocketContext';
 import UserContext, { UserDataContext } from '../contaxt/UserContext';
+import LiveTracking from '../components/LiveTracking';
 
   const home = () => {
 
@@ -214,10 +215,7 @@ useGSAP(function(){
       <div className="h-screen w-full">
         
         
-        <img className='h-full w-full object-cover' 
-              src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif">
-                
-              </img>
+       <LiveTracking/>
   
        </div>
        <div className='flex flex-col justify-end h-screen absolute top-0 w-full'>

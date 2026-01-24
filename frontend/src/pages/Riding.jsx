@@ -3,6 +3,7 @@ import { FaGripfire } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import 'remixicon/fonts/remixicon.css';
 import { SocketContext } from '../contaxt/SocketContext';
+import LiveTracking from '../components/LiveTracking';
 
 const Riding = () => {
 
@@ -26,10 +27,7 @@ const Riding = () => {
                         </Link>
                       </div>
                       <div className="h-4/5">
-                      
-                        <img
-                          className='h-full w-full object-cover'
-                          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="map" />
+                       <LiveTracking/>
                       </div>
 
             </div>

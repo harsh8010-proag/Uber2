@@ -19,7 +19,8 @@ const UserSignup = () => {
   const navigate = useNavigate();
 
   const { user, setUser } = React.useContext(UserDataContext);
-    const submitHandler = async(e) =>{
+   
+  const submitHandler = async(e) =>{
       e.preventDefault();
 
       const newUser = {
@@ -47,9 +48,9 @@ const UserSignup = () => {
      
         localStorage.setItem('token',data.token);
      
-         toast.success("Registration successful! Welcome 🎉", {
+         toast.success("Registration successful!", {
           position: "top-center",
-          autoClose: 3000,
+          autoClose: 2000,
           theme: "colored",
         });
 
@@ -126,7 +127,7 @@ const UserSignup = () => {
                          placeholder='Enter your email'
                          value={email}
                          onChange={(e)=>{
-                          setEmail(e.target.value)
+                          setEmail(e.target.value);
                          }}
                    className='bg-[#eeeeee] rounded px-4 py-2  w-full text-lg mb-5 placeholder:text-same'
                   

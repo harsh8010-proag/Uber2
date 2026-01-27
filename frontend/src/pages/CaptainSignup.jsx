@@ -3,6 +3,7 @@ import { FaGripfire } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowRight } from "react-icons/fa";
 import { CaptainDataContext } from '../contaxt/CaptanContext';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const Captainsignup = () => {
@@ -11,13 +12,14 @@ const Captainsignup = () => {
     const [ password, setPassword ]= useState('');
     const [ firstName, setFitstName ] = useState('');
     const [ lastName, setLastName] = useState('');
-    const [ userData, setUserData] = useState('');
+    const [ userData, setUserData] = useState('');  
 
     const [vehicleColor, setVehicleColor] = useState('');
     const [vehiclePlate, setVehiclePlate] = useState('');
     const [vehicleCapacity, setVehicleCapacity] = useState('');
     const [vehicleType, setVehicleType] = useState('');
 
+    const [serverError, setServerError] = useState('');
     const { captain, setCaptain } = React.useContext(CaptainDataContext);
   
     const navigate = useNavigate();
@@ -39,13 +41,21 @@ const Captainsignup = () => {
             vehicleType:vehicleType
           }
         }
-   
+   try{
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`,captainData);
 
     if(response.status === 201){
       const data = response.data
+      
       setCaptain(data.captain);
+      
       localStorage.setItem('token',data.token);
+               toast.success("Registration successful!", {
+                position: "top-center",
+                autoClose: 2000,
+                theme: "colored",
+              });
+
       navigate('/captain-home');
     }
     console.log(userData);
@@ -57,7 +67,22 @@ const Captainsignup = () => {
         setVehicleCapacity('');
         setVehiclePlate('');
         setVehicleType('');
-       }
+       }catch(error){
+           if (error.response && error.response.data) {
+        // Exprss validator errors, display first message
+        if (error.response.data.errors) {
+          setServerError(error.response.data.errors[0].msg);
+        } else if (error.response.data.message) {
+          //other custome backend Error
+          setServerError(error.response.data.message);
+        } else {
+          setServerError('unkown error occured.')
+        }
+      } else {
+        setServerError('Network error');
+      }
+      }
+      }
 
   return (
 
@@ -171,8 +196,10 @@ const Captainsignup = () => {
               <option value="auto">Auto</option>
              
             </select>
-          </div>
-
+           </div>
+                    {serverError && (
+            <p className="text-sm text-red-500 mb-3">{serverError}</p>
+          )}
 
                        <button
                        className='bg-[#111] text-white font-semibold  px-4 py-2 w-full '
@@ -190,3 +217,18 @@ const Captainsignup = () => {
 }
 
 export default Captainsignup;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

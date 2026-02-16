@@ -11,8 +11,12 @@ import ConfirmRide from '../components/ConfirmRide';
 import ConfirmRidePopUp from '../components/ConfirmRidePopUp';
 import { SocketContext } from '../contaxt/SocketContext';
 import { CaptainDataContext } from '../contaxt/CaptanContext';
+ 
 import axios from 'axios';
 import LiveTracking from '../components/LiveTracking';
+import profile from '../assets/download.png';
+
+
 
 const CaptainHome = () => {
  
@@ -112,9 +116,18 @@ async function confirmRide(){
             A<span className='text-black'>ber</span>
           </h1>
         </div>
-        <Link to={'/captain-home'} className='m-2 text-white  h-10 w-10 bg-gray-700/70 flex items-center justify-center rounded-full'>
-          <i className="text-lg ri-home-4-line"></i>
-        </Link>
+        <div className="flex items-center gap-1 m-2">
+          <Link to="/captain-profile" className="flex-shrink-0 rounded-full overflow-hidden border-2 border-white/80 shadow h-10 w-10">
+            <img
+              src={captain?.profileImage ? (captain.profileImage.startsWith('http') ? captain.profileImage : `${import.meta.env.VITE_BASE_URL || ''}${captain.profileImage}`) : profile}
+              alt="Profile"
+              className="h-full w-full object-cover"
+            />
+          </Link>
+          <Link to={'/captain-home'} className='text-white h-10 w-10 bg-gray-700/70 flex items-center justify-center rounded-full'>
+            <i className="text-lg ri-home-4-line"></i>
+          </Link>
+        </div>
       </div>
       <div className="h-3/5">
       <LiveTracking/>

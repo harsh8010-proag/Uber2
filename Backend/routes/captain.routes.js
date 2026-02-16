@@ -25,6 +25,7 @@ router.post('/login',[
 )
 
 router.get('/profile', authMiddleware.authCaptain, captainController.getCaptainProfile);
+router.patch('/profile', authMiddleware.authCaptain, captainController.updateCaptainProfile);
 
 router.get('/logout', authMiddleware.authCaptain, captainController.logoutCaptain);
 

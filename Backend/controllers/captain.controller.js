@@ -1,7 +1,9 @@
  const captainModel = require('../models/captain.model'); 
  const captainService = require('../services/captain.service'); 
  const { validationResult } = require('express-validator'); 
- const blackListTokenModel = require('../models/blacklistToken.model')
+ const blackListTokenModel = require('../models/blacklistToken.model');
+ const fs = require('fs');
+ const path = require('path');
  
  
  module.exports.registerCaptain = async (req, res, next)=>{ 
@@ -79,6 +81,37 @@ const token = captain.generateAuthToken();
     res.status(200).json({
         captain: req.captain
     })
+ };
+
+ module.exports.updateCaptainProfile = async (req, res, next) => {
+    try {
+        const captainId = req.captain._id;
+        const { fullname, vehicle, profileImage: profileImageBase64 } = req.body;
+        let profileImagePath = null;
+
+        if (profileImageBase64 && typeof profileImageBase64 === 'string' && profileImageBase64.startsWith('data:image/')) {
+            const uploadsDir = path.join(__dirname, '..', 'uploads', 'captain');
+            if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+            const match = profileImageBase64.match(/^data:image\/(\w+);base64,(.+)$/);
+            const ext = match ? (match[1] === 'jpeg' ? 'jpg' : match[1]) : 'png';
+            const filename = `${captainId}-${Date.now()}.${ext}`;
+            const filePath = path.join(uploadsDir, filename);
+            const base64Data = (match && match[2]) || profileImageBase64.split(',')[1];
+            if (base64Data) {
+                fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
+                profileImagePath = `/uploads/captain/${filename}`;
+            }
+        }
+
+        const updates = {};
+        if (fullname) updates.fullname = fullname;
+        if (vehicle) updates.vehicle = vehicle;
+
+        const captain = await captainService.updateCaptainProfile(captainId, updates, profileImagePath);
+        res.status(200).json({ captain });
+    } catch (err) {
+        next(err);
+    }
  };
 
 module.exports.logoutCaptain = async (req, res, next) => {

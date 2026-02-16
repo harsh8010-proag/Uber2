@@ -72,7 +72,7 @@ const UserLogin = () => {
 
   }
   return (
-    <div className='p-7 flex flex-col items-between'>
+    <div className='p-7 flex flex-col h-screen justify-between'>
       <div>
         <div className="logo flex items-center mb-10">
           <FaGripfire className='text-[35px] text-red-500 ' />

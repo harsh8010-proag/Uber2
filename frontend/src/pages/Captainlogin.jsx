@@ -60,7 +60,7 @@ import axios from 'axios';
   }
 
   return (
-   <div className='py-7 px-5 flex flex-col justify-between'>
+   <div className='py-7 px-5 flex flex-col  h-screen justify-between'>
            <div>            
            <div className="logo flex items-center mb-10">
                    <FaGripfire className='text-[35px] text-red-500 '/>

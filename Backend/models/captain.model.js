@@ -29,6 +29,10 @@ const captainSchema = new mongoose.Schema({
     socketId: {
         type: String,
     },
+    profileImage: {
+        type: String,
+        default: '',
+    },
 
     status: {
         type: String,

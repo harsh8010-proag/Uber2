@@ -90,14 +90,14 @@ module.exports.getAutoCompleteSuggestions = async (input) =>{
 
 module.exports.getCaptainsInTheRadius = async (ltd,lng,radius) =>{
     //radius in km 
-    console.log(`PicupCordinates ltd:${ltd}: lng:${lng}`)
+    // console.log(`PicupCordinates ltd:${ltd}: lng:${lng}`)
    
   const captains = await captainModel.find({
         "vehicle.location": {  
             $geoWithin: {
                 $centerSphere: [ 
                     [ parseFloat(lng), parseFloat(ltd) ],  
-                    radius / 6378.1 
+                    radius / 6378.1 // 6378.1 = Earth radius in kilometers
                 ]
             }
         }

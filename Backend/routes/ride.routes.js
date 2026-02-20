@@ -38,4 +38,9 @@ router.post('/end-ride',
     rideController.endRide
 )
 
+router.get('/pending-payment',authMiddleware.authUser,
+     
+    rideController.getPendingPayment
+)
+
 module.exports = router;

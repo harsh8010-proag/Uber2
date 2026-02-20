@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FaGripfire } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import 'remixicon/fonts/remixicon.css';
-import FinishRide from './FinishRide';
+import FinishRide from '../components/FinishRide';
 import { useRef } from 'react';
 import gsap from "gsap";
 import {useGSAP} from '@gsap/react';

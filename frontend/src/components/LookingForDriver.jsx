@@ -1,5 +1,5 @@
 import React from 'react'
-
+import upiimg from '../assets/upi.webp'
 const LookingForDriver = (props) => {
 
       let vehicleimage='';
@@ -26,7 +26,7 @@ const LookingForDriver = (props) => {
 
                         <i className="ri-map-pin-user-fill text-lg"></i>
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
+                            
                             <p className='text-sm -mt-1 text-gray-600'>{props.pickup} </p>
                         </div>
                     </div>
@@ -34,18 +34,20 @@ const LookingForDriver = (props) => {
                     <div className='flex items-center gap-5 p-3 border-b-2  border-gray-500'>
                         <i className="text-lg ri-map-pin-fill"></i>
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
+                            
                             <p className='text-sm -mt-1 text-gray-600'>{props.destination}</p>
                         </div>
 
                     </div>
 
                     <div className='flex items-center gap-5 p-3  '>
-                        <i className="text-lg  text-green-700 ri-cash-line"></i>
-
+                        
+                        {props.paymentMethod==='cash'?<i className="text-lg  text-green-700 ri-cash-line"></i>:<img src={upiimg} alt='upi' className='h-[50px]'/>}
+                      
                         <div >
                             <h3 className='text-lg font-medium'>₹{props.fare[props.vehicleType]}</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>
+                            {props.paymentMethod==='cash'?<p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>:''}
+                            
                         </div>
 
                     </div>

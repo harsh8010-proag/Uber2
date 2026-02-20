@@ -13,11 +13,11 @@ module.exports.createRide = async (req , res) =>{
         });
     }
 
-    const {  pickup, destination, vehicleType} =  req.body;
-
+    const {  pickup, destination, vehicleType ,paymentMethod} =  req.body;
+     console.log(paymentMethod)
     try{
         
-        const ride = await rideService.createRide({ user: req.user._id, pickup, destination, vehicleType});
+        const ride = await rideService.createRide({ user: req.user._id, pickup, destination, vehicleType,paymentMethod});
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
      
 
@@ -145,7 +145,59 @@ module.exports.endRide = async (req, res) =>{
 
             return res.status(200).json(ride);
         }catch(err){
-            return res.status(200).json(ride);
+            return res.send(err)
         }
     
+    
+}
+
+module.exports.getPendingPayment = async (req, res) =>{
+
+    try{
+     const ride = await rideModel.findOne({
+        user:req.user._id,
+        status:'completed',
+        paymentStatus:'pending',
+        paymentMethod:'upi'
+     }).sort({createAt: -1}) ;
+
+     if(!ride){
+        return res.json({
+            pending:false
+        })  }
+
+        res.json({
+            pending:true,
+            ride
+        })
+    }catch(err){
+        return res.send(err)
+    }
+}
+
+module.exports.payRide= async (req,res) =>{
+     
+    const errors = validationResult(req);
+    if(errors.isEmpty()){
+        return res.status(400).json({
+               errors: errors.array()
+            })
+        }
+
+    const {rideId} = req.body;
+     try{
+     await rideModel.findOneAndUpdate({
+             _id:rideId
+         },{
+             paymentStatus: 'paid'
+         })
+
+         res.json({
+            success:true,
+            message:'payment successful'
+         })
+
+     }catch(err){
+     return res.status(404).json({ message:err });
+          }
 }

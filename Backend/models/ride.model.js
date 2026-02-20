@@ -28,6 +28,16 @@ const rideScema = new mongoose.Schema({
         enum : ['pending','accepted','ongoing','completed','cancelled'],
         default: 'pending',
     },
+    paymentMethod:{
+         type: String,
+         enum: ['cash','upi'],
+         default:'cash'
+    },
+    paymentStatus:{
+         type: String,
+         enum: ['pending','paid'],
+         default:'pending'
+            },
     duration:{
         type:Number,
     },// in decond
@@ -46,6 +56,6 @@ const rideScema = new mongoose.Schema({
         select: false,
         required:true
     }
-})
+},{ timestamps: true })
 
 module.exports = mongoose.model('ride',rideScema);

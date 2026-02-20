@@ -1,4 +1,5 @@
 import React from 'react';
+import upi from '../assets/upi.webp'
 
 const ConfirmRide = (props) => {
 
@@ -11,6 +12,8 @@ const ConfirmRide = (props) => {
      vehicleimage='https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=368/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8xZGRiOGM1Ni0wMjA0LTRjZTQtODFjZS01NmExMWEwN2ZlOTgucG5n'
    }  
   
+   const {paymentMethod ,setPaymentMethod} = props;
+   console.log('pay',paymentMethod)
   return (
     <div>
       < h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
@@ -26,7 +29,7 @@ const ConfirmRide = (props) => {
 
             <i className="ri-map-pin-user-fill text-lg"></i>
             <div >
-              <h3 className='text-lg font-medium'>562/11-A</h3>
+              {/* <h3 className='text-lg font-medium'>562/11-A</h3> */}
               <p className='text-sm -mt-1 text-gray-600'>{props.pickup} </p>
             </div>
           </div>
@@ -34,21 +37,40 @@ const ConfirmRide = (props) => {
           <div className='flex items-center gap-5 p-3 border-b-2  border-gray-500'>
             <i className="text-lg ri-map-pin-fill"></i>
             <div >
-              <h3 className='text-lg font-medium'>562/11-A</h3>
+              {/* <h3 className='text-lg font-medium'>562/11-A</h3> */}
               <p className='text-sm -mt-1 text-gray-600'>{props.destination}</p>
             </div>
 
           </div>
-
-          <div className='flex items-center gap-5 p-3  '>
-            <i className="text-lg  text-green-700 ri-cash-line"></i>
-
-            <div >
-              <h3 className='text-lg font-medium'>₹{props.fare[ props.vehicleType]}</h3>
-              <p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>
+                          
+            <p className='m-2 text-lg '>select  payment method</p>              
+          <div className='flex p-3 justify-between  '>
+            
+            <div className='p-2 rounded-lg bg-zinc-200 flex items-center h-[50px]'>
+              
+              <select
+              value={paymentMethod}
+              onChange={(e)=> setPaymentMethod(e.target.value)}
+              >
+                <option value='cash'>Cash</option>
+                <option value="upi">UPI</option>
+              </select>
+              {paymentMethod==='cash'?<i className="text-lg  text-green-700 ri-cash-line "></i>:<img src={upi} alt='upi' className='h-[40px]'/>}
+                            
             </div>
 
-          </div>
+            <div className='flex items-center gap-5'>
+            {paymentMethod==='cash'?<i className="text-lg  text-green-700 ri-cash-line "></i>:<img src={upi} alt='upi' className='h-[40px]'/>}
+           
+            <h3 className='text-lg font-medium'>₹{props.fare[ props.vehicleType]}</h3>
+           </div>
+            
+            </div>
+             
+               
+           
+            
+            
           <button
             onClick={() => {
               props.setVehicleFound(true);

@@ -25,7 +25,7 @@ function initializeSocket(server){
                   console.log(`${userType} is connected as ${socket.id}`);
             } else if (userType === 'captain'){
                 await captainModel.findByIdAndUpdate(userId ,{ socketId: socket.id });
-                  console.log(` ${socket.id} id is connected as ${userType}`);
+                  console.log(`  ${userType} connected on id${socket.id} `);
             }
         });
 
@@ -65,8 +65,6 @@ await captainModel.findByIdAndUpdate(userId,
 }
 
 const sendMessageToSocketId = (socketId, messageObject)=>{
-
-  
 
     if(io){
  

@@ -27,6 +27,8 @@ import LiveTracking from '../components/LiveTracking';
   const [ vehicleType, setVehicleType] =useState('');
   const [fare,setFare] =useState({});
   const [ride,setRide] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('cash')
+  const [pendingRide,setPendingRide] = useState('')
 
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriver, setWaitingForDriver] = useState(false);
@@ -53,6 +55,18 @@ import LiveTracking from '../components/LiveTracking';
     setRide(ride);
     
   })  
+
+  useEffect(()=>{
+   checkPendingPayment()
+  },[]);
+
+  const checkPendingPayment = async()=>{
+    const res =await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/pending-payment`)
+    const pending= res.data.pending;
+    if(pending){
+      setPendingRide(res.pending.ride)
+    }
+  }
 
       socket.on('ride-started', ride => {
     
@@ -195,7 +209,8 @@ useGSAP(function(){
   const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`,{
     pickup,
     destination,
-    vehicleType
+    vehicleType,
+    paymentMethod
   },{
     headers:{
       Authorization : `Bearer ${localStorage.getItem('token')}`
@@ -205,7 +220,14 @@ useGSAP(function(){
   
   return (
     <div className='h-screen relative overflow-hidden'>      
-     
+     {pendingRide && (
+  <div className="payment-modal">
+    <h3>Pending Payment: ₹{pendingRide.fare}</h3>
+    <button >
+      Pay Now
+    </button>
+  </div>
+)}
       <div className="logo flex text-2xl items-center absolute bg-gray-300/60  m-5 px-2 rounded-[5px]">
               <FaGripfire className=' text-red-500 '/>
               <h1 className='inter-harsh2  text-orange-500 '>
@@ -301,8 +323,11 @@ useGSAP(function(){
             destination={destination}
             fare = {fare}
             vehicleType ={vehicleType}
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
             setConfirmRidePanel={setConfirmRidePanel} 
-            setVehicleFound={setVehicleFound} />
+            setVehicleFound={setVehicleFound}
+             />
 
           </div>
 
@@ -314,6 +339,7 @@ useGSAP(function(){
              destination={destination}
              fare = {fare}
              vehicleType ={vehicleType}
+             paymentMethod={paymentMethod}
              setVehicleFound={setVehicleFound} setWaitingForDriver={setWaitingForDriver}/>
           </div>
 
@@ -322,6 +348,7 @@ useGSAP(function(){
              className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 '>
             <WaitingForDriver 
             ride={ride}
+            paymentMethod={paymentMethod}
             setWaitingForDriver={setWaitingForDriver}/>
           </div>
 

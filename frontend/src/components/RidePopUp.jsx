@@ -1,8 +1,9 @@
 import React from 'react'
 import profileimg from '../assets/download.png'
+import upi from '../assets/upi.webp';
 
 const RidePopUp = (props) => {
-    console.log(props)
+ console.log('props',props.ride)
     return (
         <div>
             <h5 className='p-1 text-center w-[93%] absolute top-0'
@@ -16,7 +17,7 @@ const RidePopUp = (props) => {
                         src={profileimg} alt="" />
                     <h2 className='text-lg font-medium'>{props.ride?.user.fullname.firstname+" "+props.ride?.user.fullname.lastname}</h2>
                 </div>
-                <h5 className='text-lg font-semibold'>2.2 KM</h5>
+                <h5 className='text-lg font-semibold'>2.0 KM</h5>
             </div>
             <div className='flex gap-2 flex-col justify-between items-center'>
 
@@ -25,7 +26,7 @@ const RidePopUp = (props) => {
 
                         <i className="ri-map-pin-user-fill text-lg"></i>
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
+                   
                             <p className='text-sm -mt-1 text-gray-600'>{props.ride?.pickup}</p>
                         </div>
                     </div>
@@ -33,18 +34,18 @@ const RidePopUp = (props) => {
                     <div className='flex items-center gap-5 p-3 border-b-2  border-gray-500'>
                         <i className="text-lg ri-map-pin-fill"></i>
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
+                        
                             <p className='text-sm -mt-1 text-gray-600'>{props.ride?.destination} </p>
                         </div>
 
                     </div>
 
                     <div className='flex items-center gap-5 p-3  '>
-                        <i className="text-lg  text-green-700 ri-cash-line"></i>
+                          {props.ride?.paymentMethod ==='cash'?<i className="text-lg  text-green-700 ri-cash-line "></i>:<img src={upi} alt='upi' className='h-[40px]'/>}
 
                         <div >
                             <h3 className='text-lg font-medium'>₹{props.ride?.fare}</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>
+                             {props.ride?.paymentMethod==='cash'?<p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>:''}
                         </div>
 
                     </div>

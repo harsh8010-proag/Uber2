@@ -54,9 +54,9 @@ function getOtp(num){
 
 
 module.exports.createRide = async ({
-    user, pickup, destination, vehicleType
+    user, pickup, destination, vehicleType, paymentMethod
 }) => {
-    if(!user || !pickup || !destination || !vehicleType){
+    if(!user || !pickup || !destination || !vehicleType || !paymentMethod){
         throw new Error('All fields are required');
     }
 
@@ -67,7 +67,9 @@ module.exports.createRide = async ({
         pickup,
         destination,
         otp:getOtp(6),
-        fare: fare[ vehicleType ]
+        fare: fare[ vehicleType ],
+        paymentMethod,
+        paymentStatus:'pending'
     })
 
     return ride;
@@ -109,9 +111,7 @@ module.exports.startRide = async({ rideId, otp, captain}) => {
         _id:rideId
     }).populate('user').populate('captain').select('+otp');
 
-    if(!ride){
-        throw new Error('Ride not found');
-    }
+ 
 
     if(ride.status !== 'accepted'){
         throw new Error('Ride not accepted');
@@ -143,16 +143,23 @@ module.exports.endRide = async ({rideId, captain})=>{
       if(!ride){
         throw new Error('Ride not Found');
     }
-    if(ride.status !== 'ongoing'){
-        throw new Error('ride not ongoing');
-    }
+  
 
     await rideModel.findOneAndUpdate({
         _id:rideId
     },{
         status: 'completed'
     })
+
+    if(ride.paymentMethod === 'cash'){
+        await rideModel.findOneAndUpdate({
+        _id:rideId
+    },{
+        paymentStatus: 'paid'
+    })
+    }
   
+
     return ride;
       
 }

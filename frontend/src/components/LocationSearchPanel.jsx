@@ -17,7 +17,7 @@ const LocationSearchPanel = ({suggestions,setVehiclePanel,setPanelOpen,setPickup
 
   return (
        
-    <div className='mt-10'>
+    <div className='mt-10 '>
       {
          suggestions?.map((elem, idx) => (
                     <div key={idx} onClick={() => handleSuggestionClick(elem)} className='flex gap-4 border-2 p-3 border-gray-100 active:border-black rounded-xl items-center my-2 justify-start'>

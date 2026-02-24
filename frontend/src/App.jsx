@@ -15,6 +15,7 @@ import CaptainProtectWrapper from './pages/CaptainProtectWrapper';
 import Riding from './pages/Riding';
 import CaptainRiding from './pages/CaptainRiding';
 import CaptainLogout from './pages/CaptainLogout';
+import Ongoing from './pages/Ongoing';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -26,7 +27,7 @@ const App = () => {
   return (
 
     <div>
-      <ToastContainer position="top-center" style={{ zIndex: 9999 }} />
+      <ToastContainer position="top-center" autoClose={1500} style={{ zIndex: 9999 }} />
       <Routes>
    
         <Route path='/' element={<Start />} />
@@ -36,6 +37,7 @@ const App = () => {
           </UserProtectWrapper>} />
         <Route path='/login' element={<UserLogin />} />
         <Route path='/riding' element={<Riding />} />
+        <Route path='/ongoing' element={<Ongoing />} />
         <Route path='/captain-riding' element={<CaptainRiding />} />
         <Route path='/signup' element={<UserSignup />} />
         <Route path='/captain-login' element={<Captainlogin />} />

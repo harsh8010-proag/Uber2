@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import upi from '../assets/upi.webp';
 import dprofile from '../assets/download.png'
+import axios from 'axios';
 
 const FinishRide = (props) => {
 

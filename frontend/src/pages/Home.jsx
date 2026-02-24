@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { SocketContext } from '../contaxt/SocketContext';
 import UserContext, { UserDataContext } from '../contaxt/UserContext';
 import LiveTracking from '../components/LiveTracking';
+import { toast } from 'react-toastify';
+import upi from '../assets/upi.webp'
 
   const home = () => {
 
@@ -49,31 +51,68 @@ import LiveTracking from '../components/LiveTracking';
     socket.emit("join",{userType:"user",userId:user._id});
   },[ user ]);
 
-  socket.on('ride-confirmed', ride =>{
-    setVehicleFound(false);
-    setWaitingForDriver(true);
-    setRide(ride);
-    
-  })  
+   
 
   useEffect(()=>{
    checkPendingPayment()
   },[]);
 
+
+  useEffect(() => {
+
+  socket.on('ride-confirmed', (ride) => {
+    setVehicleFound(false);
+    setWaitingForDriver(true);
+    setRide(ride);
+  });
+
+  socket.on('ride-started', (ride) => {
+    setWaitingForDriver(false);
+    navigate('/ongoing', { state: { ride } });
+  });
+
+  socket.on('ride-canceled', (ride) => {
+    toast.error(
+      "Driver canceled the ride. Searching for another driver..."
+    );
+
+    setWaitingForDriver(false);
+    setVehicleFound(true);
+  });
+
+socket.on('ride-ended',()=>{
+     
+       checkPendingPayment()
+    })
+   
+  return () => {
+    socket.off('ride-confirmed');
+    socket.off('ride-started');
+    socket.off('ride-canceled');
+    socket.off('ride-pending')
+  };
+
+}, [socket, navigate]);
+
   const checkPendingPayment = async()=>{
-    const res =await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/pending-payment`)
-    const pending= res.data.pending;
-    if(pending){
-      setPendingRide(res.pending.ride)
+    const res =await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/pending-payment`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    )
+    //  console.log('pending method',res.data.pending);
+    if(res.data.pending){
+      
+      setPendingRide(res.data.ride);
     }
   }
 
-      socket.on('ride-started', ride => {
     
-        setWaitingForDriver(false)
-        navigate('/riding', { state: { ride } })  
-    })
- 
+
+                 
+       
   
 const handlePickupChange = async (e) => {
         setPickup(e.target.value);
@@ -188,13 +227,15 @@ useGSAP(function(){
         }
        
 
-    },[ vehicleFound]);
+    },[ waitingForDriver]);
 
+    
  async function findTrip(){
 
-  
-   setVehiclePanel(true);
-   setPanelOpen(false)
+if (!pickup.trim() || !destination.trim()) {
+  toast.error("Both locations are required.");
+  return;
+}
 
    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`,
     {params:{pickup, destination},
@@ -203,6 +244,9 @@ useGSAP(function(){
      }})
      
      setFare(response.data);
+
+     setVehiclePanel(true);
+   setPanelOpen(false)
  } 
 
  async function createRide(){
@@ -213,22 +257,60 @@ useGSAP(function(){
     paymentMethod
   },{
     headers:{
-      Authorization : `Bearer ${localStorage.getItem('token')}`
+      Authorization : `Bearer ${localStorage.getItem('token')}`                 
     }
   })
+ }
+
+ const handlePayment=async()=>{
+ await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/pay`,{
+       rideId:pendingRide._id      
+        },{
+    headers:{
+      Authorization : `Bearer ${localStorage.getItem('token')}`                 
+    }
+  });
+        toast.success('Payment Successful');
+        setPendingRide('');
  }
   
   return (
     <div className='h-screen relative overflow-hidden'>      
-     {pendingRide && (
-  <div className="payment-modal">
-    <h3>Pending Payment: ₹{pendingRide.fare}</h3>
-    <button >
-      Pay Now
-    </button>
+      {pendingRide && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+
+    {/* Popup Box */}
+    <div className="bg-white rounded-lg p-5 w-[90%] max-w-sm shadow-xl">
+      
+      <p className="text-center font-semibold text-lg  text-zinc-600">
+        Pending Payment
+      </p>
+
+      <div className="flex items-center gap-5 p-3 border-b-2">
+        <img src={upi} alt="upi" className="h-[40px]" />
+        <div>
+          <h3 className="text-lg font-medium">₹{pendingRide?.fare}</h3>
+        </div>
+      </div>
+
+   <div className='flex items-center gap-5 p-3 border-b-2'>
+    <i className="text-lg ri-map-pin-2-fill"></i>
+       <div>
+        <p className='text-sm -mt-1 text-gray-600'>{pendingRide?.destination}</p>
+        </div>
+    </div>
+<p className='text-sm text-zinc-500'>Your ride is completed. Please make the payment.</p>
+      <button
+        onClick={handlePayment}
+        className="bg-green-500 text-lg text-white font-semibold rounded-lg w-full mt-4 py-2"
+      >
+        Pay
+      </button>
+
+    </div>
   </div>
 )}
-      <div className="logo flex text-2xl items-center absolute bg-gray-300/60  m-5 px-2 rounded-[5px]">
+      <div className="logo flex text-2xl items-center absolute bg-gray-300/60  m-5 px-2 rounded-[5px] z-1">
               <FaGripfire className=' text-red-500 '/>
               <h1 className='inter-harsh2  text-orange-500 '>
                 A<span className='text-black'>ber</span>
@@ -240,9 +322,9 @@ useGSAP(function(){
        <LiveTracking/>
   
        </div>
-       <div className='flex flex-col justify-end h-screen absolute top-0 w-full'>
+       <div className='flex flex-col justify-end h-full absolute top-0 w-full z-1 '>
        
-       <div className='h-[30%] p-6 bg-white relative'>
+       <div className='h-[30%] p-6 bg-white relative  '>
         <h5 ref={panelCloseRef} onClick={()=>{
           setPanelOpen(false);
         }} 

@@ -11,7 +11,7 @@ import axios from 'axios';
  
  
 
-const Riding = () => {
+const Ongoing = () => {
 
     const location   = useLocation();
     const { ride }   = location.state;
@@ -20,20 +20,12 @@ const Riding = () => {
     const navigate = useNavigate();
  
 
- 
+    socket.on('ride-ended',()=>{
+        navigate('/riding',{ state: { ride } })
+       
+    })
 
-    const handlePayment = async () => {
-        await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/pay`,{
-       rideId:ride._id      
-        },{
-    headers:{
-      Authorization : `Bearer ${localStorage.getItem('token')}`                 
-    }
-  });
-        toast.success('Payment Successful');
-        navigate('/Home')       
-
-    }
+    
 
   return (
    <div className='h-screen relative  '>
@@ -52,7 +44,7 @@ const Riding = () => {
             </div>
             <div className=' h-1/2 px-4 flex flex-col justify-center '>
             
-               <p className='text-2xl text-green-700'>Ride complated <i className="ri-checkbox-circle-fill text-lg"></i></p>   
+               <p className='text-2xl text-green-700'>Ride Started <i className="ri-record-circle-line text-lg"></i></p>   
                 <div className='flex items-center justify-between mt-2'>
                     <img className='h-12' src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg" alt="" />
                     <div className='text-right'>
@@ -82,12 +74,7 @@ const Riding = () => {
                         </div>
                           
                             <div>
-                                 { 
-                                 ride.paymentMethod==='upi'?<button 
-                                 onClick={handlePayment}
-                                 className='bg-green-500 text-lg text-white font-semibold rounded-lg w-full m-2 p-2'>Make Payment</button>:<p className='text-green-700 font-medium'> pay cash</p> 
-
-                                 }
+                                <p className='text-green-700 text-lg'>Ride in Progrese</p>
                             </div>
                           
                     </div>
@@ -101,4 +88,4 @@ const Riding = () => {
   )
 }
 
-export default Riding;
+export default Ongoing;

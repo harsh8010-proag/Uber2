@@ -2,8 +2,10 @@
  const captainService = require('../services/captain.service'); 
  const { validationResult } = require('express-validator'); 
  const blackListTokenModel = require('../models/blacklistToken.model');
+ const rideModel = require('../models/ride.model')
  const fs = require('fs');
  const path = require('path');
+
  
  
  module.exports.registerCaptain = async (req, res, next)=>{ 
@@ -78,8 +80,11 @@ const token = captain.generateAuthToken();
 
  module.exports.getCaptainProfile = async (req, res, next) => {
 
+     
+
     res.status(200).json({
-        captain: req.captain
+        captain: req.captain,
+        
     })
  };
 
@@ -106,8 +111,12 @@ const token = captain.generateAuthToken();
         const updates = {};
         if (fullname) updates.fullname = fullname;
         if (vehicle) updates.vehicle = vehicle;
+          
 
         const captain = await captainService.updateCaptainProfile(captainId, updates, profileImagePath);
+
+       
+
         res.status(200).json({ captain });
     } catch (err) {
         next(err);

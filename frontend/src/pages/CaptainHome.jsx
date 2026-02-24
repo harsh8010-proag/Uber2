@@ -59,7 +59,7 @@ useEffect(() => {
   const locationInterval = setInterval(updateLocation,10000);
   updateLocation();
 
-  socket.on('new-ride', (data) => {
+  socket.on('new-ride',(data)=>{
     
     setRide(data);
     setRidePopupPanel(true);
@@ -109,25 +109,14 @@ async function confirmRide(){
           
   return (
     <div className='h-screen'>
-      <div className='flex w-full items-center justify-between  fixed'>
-        <div className="logo flex text-2xl items-center  bg-gray-300/60  m-2 px-2 rounded-[5px]">
+      <div className='flex w-full items-center justify-between  fixed z-50'>
+        <div className="logo flex text-2xl items-center  bg-gray-300/60  m-2 px-2 rounded-[5px] ">
           <FaGripfire className=' text-red-500 ' />
           <h1 className='inter-harsh2  text-orange-500 '>
             A<span className='text-black'>ber</span>
           </h1>
         </div>
-        <div className="flex items-center gap-1 m-2">
-          <Link to="/captain-profile" className="flex-shrink-0 rounded-full overflow-hidden border-2 border-white/80 shadow h-10 w-10">
-            <img
-              src={captain?.profileImage ? (captain.profileImage.startsWith('http') ? captain.profileImage : `${import.meta.env.VITE_BASE_URL || ''}${captain.profileImage}`) : profile}
-              alt="Profile"
-              className="h-full w-full object-cover"
-            />
-          </Link>
-          <Link to={'/captain-home'} className='text-white h-10 w-10 bg-gray-700/70 flex items-center justify-center rounded-full'>
-            <i className="text-lg ri-home-4-line"></i>
-          </Link>
-        </div>
+        
       </div>
       <div className="h-3/5">
       <LiveTracking/>

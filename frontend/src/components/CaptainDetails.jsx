@@ -5,7 +5,8 @@ import { CaptainDataContext } from '../contaxt/CaptanContext';
 import profile from '../assets/download.png';
 
 const CaptainDetails = () => {
-    const { captain } = useContext(CaptainDataContext);
+    const { captain  } = useContext(CaptainDataContext);
+     
     const baseUrl = import.meta.env.VITE_BASE_URL || '';
     const profileSrc = captain?.profileImage
         ? (captain.profileImage.startsWith('http') ? captain.profileImage : `${baseUrl}${captain.profileImage}`)
@@ -29,8 +30,9 @@ const CaptainDetails = () => {
                     </div>
                 </Link>
                 <div>
-                    <h4 className='text-xl font-semibold'>₹295.20 </h4>
-                    <p className='text-sm   text-gray-600'>Earnd</p>
+                  
+                    <h4 className='text-xl font-semibold'><i class="ri-wallet-line mr-2 "></i>₹{captain.totalEarnings} </h4>
+                    {/* <p className='text-md text-green-600'>Earned</p> */}
                 </div>
             </div>
             <div className='flex p-3 mt-6 justify-center gap-5 items-start bg-yellow-400 rounded-xl'>

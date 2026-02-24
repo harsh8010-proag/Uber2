@@ -32,12 +32,25 @@ router.get('/start-ride',
     rideController.startRide
 )
 
+router.get('/cancel-ride',
+    authMiddleware.authCaptain,
+    rideController.cancelRide
+);
+
+
 router.post('/end-ride',
     authMiddleware.authCaptain,
     body('rideId').isMongoId().withMessage('Invalid ride id'),
     rideController.endRide
 )
 
+
+router.post('/pay',authMiddleware.authUser,
+    body('rideId').isMongoId().withMessage('Invalid ride id'),
+    rideController.payRide)
+
+
+    
 router.get('/pending-payment',authMiddleware.authUser,
      
     rideController.getPendingPayment

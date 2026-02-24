@@ -73,8 +73,12 @@ const captainSchema = new mongoose.Schema({
                 default: [0, 0]    
             }
         }
+    
 
-
+    },
+    totalEarnings:{
+        type: Number,
+        default:0
     }
 })
 

@@ -5,12 +5,20 @@ import profileimg from '../assets/download.png'
 import upi from '../assets/upi.webp';
 
 const ConfirmRidePopUp = (props) => {
+    const [error, setError] = useState('')
     
     let [otp,setOtp] = useState('');
     const navigate = useNavigate()
     
     const submitHandler = async (e)=>{
         e.preventDefault()
+
+
+        if(!otp.trim()){
+         setError('OTP required')
+         return
+        }
+        try{
 
         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`,{
             params:{
@@ -27,8 +35,38 @@ const ConfirmRidePopUp = (props) => {
             props.setRidePopupPanel(false);
             navigate('/captain-riding',{state: {ride:props.ride}})
          }
+        }catch(error){
+           if (error.response && error.response.data) {
+        // Exprss validator errors, display first message
+        if (error.response.data.errors) {
+          setError(error.response.data.errors[0].msg);
+        } else if (error.response.data.message) {
+          //other custome backend Error
+          setError(error.response.data.message);
+        } else {
+          setError('unkown error occured.')
+        }
+      } else {
+        setError('Network error');
+      }
+        }
 
     }
+
+    const cancelRide= async()=>{
+          const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/cancel-ride`,{
+            params:{
+                rideId: props.ride._id,
+                
+            },
+            headers:{
+                Authorization:`Bearer ${localStorage.getItem('token')}`
+            } 
+         })  
+
+         console.log('response data',response.data);
+    }
+
   return (
     <div > 
     <h5 className='p-1 text-center w-[93%] absolute top-0'
@@ -82,12 +120,14 @@ const ConfirmRidePopUp = (props) => {
                         }}>
 
                     <input  value={otp} onChange={(e) => setOtp(e.target.value)} type="text" placeholder='Enter OTP' className='text-lg bg-[#eee] px-6 py-4 text-base rounded-lg w-full mt-3 font-mono'  />
-                 
+                    {error && <p className="ml-2 text-red-500 text-md">{error}</p>}
                     <button type='submit' className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Confirm</button>
                     <button
+                        type="button"
                         onClick={() => { 
                          props.setConfirmRidePopupPanel(false);
                          props.setRidePopupPanel(false);
+                         cancelRide();
                          }}
                         className='w-full trxt-lg mt-4 bg-red-300 font-semibold p-3 rounded-lg text-gray-700'>Cancel</button>
                         </form>

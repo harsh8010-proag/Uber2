@@ -1,8 +1,9 @@
-const rideService = require('../services/ride.service');
+  const rideService = require('../services/ride.service');
 const { validationResult } = require('express-validator');
-const mapService = require('../services/mpas.service');
-const rideModel = require('../models/ride.model');
+   const mapService = require('../services/mpas.service');
 const { sendMessageToSocketId } = require('../socket');
+const rideModel = require('../models/ride.model');
+const captainModel = require('../models/captain.model');
 
 module.exports.createRide = async (req , res) =>{
     const errors = validationResult(req);
@@ -103,7 +104,7 @@ module.exports.startRide = async (req, res) =>{
         return res.status(400).json({
             errors: errors.array()
         });
-    }
+    }                               
 
     const {rideId, otp} = req.query;
 
@@ -111,8 +112,7 @@ module.exports.startRide = async (req, res) =>{
         const ride = await rideService.startRide({
             rideId, otp, captain:req.captain
         })
-      
-        console.log(ride);
+ 
        sendMessageToSocketId(ride.user.socketId,{
         event:'ride-started',
         data:ride
@@ -126,7 +126,28 @@ module.exports.startRide = async (req, res) =>{
     }
 }
 
-module.exports.endRide = async (req, res) =>{
+module.exports.cancelRide = async(req, res) =>{
+   const {rideId} = req.query;
+
+   try{
+        const ride = await rideService.cancelRide({
+            rideId,   captain:req.captain
+        })
+   
+       sendMessageToSocketId(ride.user.socketId,{
+        event:'ride-canceled',
+        data:ride
+       });
+
+       return res.status(200).json(ride);
+    }catch(err){
+       return res.status(500).json({
+        message: err.message
+       })
+    }
+}
+
+module.exports.endRide = async (req, res) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
@@ -140,7 +161,7 @@ module.exports.endRide = async (req, res) =>{
 
             sendMessageToSocketId(ride.user.socketId,{
                 event: 'ride-ended',
-                data: ride
+                data: ride       
             });
 
             return res.status(200).json(ride);
@@ -159,7 +180,12 @@ module.exports.getPendingPayment = async (req, res) =>{
         status:'completed',
         paymentStatus:'pending',
         paymentMethod:'upi'
-     }).sort({createAt: -1}) ;
+     }).sort({createAt: -1}).populate('user') ;
+
+              sendMessageToSocketId(ride.user.socketId,{
+                event: 'ride-pending',
+                data: ride       
+            });  
 
      if(!ride){
         return res.json({
@@ -178,26 +204,42 @@ module.exports.getPendingPayment = async (req, res) =>{
 module.exports.payRide= async (req,res) =>{
      
     const errors = validationResult(req);
-    if(errors.isEmpty()){
+    if(!errors.isEmpty()){
         return res.status(400).json({
                errors: errors.array()
             })
         }
-
+ 
+  
     const {rideId} = req.body;
      try{
-     await rideModel.findOneAndUpdate({
+    const ride = await rideModel.findOneAndUpdate({
              _id:rideId
          },{
              paymentStatus: 'paid'
-         })
-
+         },
+        { new: true }).populate('captain');
+ 
+    
+    await captainModel.findByIdAndUpdate(ride.captain._id,{
+         $inc: { totalEarnings: ride.fare}
+   });
+   
+        if (!ride) {
+   return res.status(404).json({
+       message: "Ride not found"
+   });
+}
          res.json({
             success:true,
             message:'payment successful'
          })
 
+
      }catch(err){
-     return res.status(404).json({ message:err });
-          }
+   console.log("ERROR:", err);
+   return res.status(500).json({ 
+       message: err.message 
+   });
+}
 }

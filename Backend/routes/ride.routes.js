@@ -56,4 +56,5 @@ router.get('/pending-payment',authMiddleware.authUser,
     rideController.getPendingPayment
 )
 
+router.get('/captain-current-ride',authMiddleware.authCaptain,rideController.getCaptaininCurrentRide)
 module.exports = router;

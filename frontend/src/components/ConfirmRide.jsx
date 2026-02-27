@@ -13,7 +13,7 @@ const ConfirmRide = (props) => {
    }  
   
    const {paymentMethod ,setPaymentMethod} = props;
-   console.log('pay',paymentMethod)
+   
   return (
     <div>
       < h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
@@ -43,8 +43,8 @@ const ConfirmRide = (props) => {
 
           </div>
                           
-            <p className='m-2 text-lg '>select  payment method</p>              
-          <div className='flex p-3 justify-between  '>
+            <p className='m-2 text-lg '>select payment method</p>              
+          <div className='flex p-3 justify-between'>
             
             <div className='p-2 rounded-lg bg-zinc-200 flex items-center h-[50px]'>
               
@@ -73,8 +73,6 @@ const ConfirmRide = (props) => {
             
           <button
             onClick={() => {
-              props.setVehicleFound(true);
-              props.setConfirmRidePanel(false);
               props.createRide();
             }}
             className='w-full mt-5 bg-green-600 font-semibold p-2 rounded-lg text-white'>Confirm</button>

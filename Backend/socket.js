@@ -22,10 +22,13 @@ function initializeSocket(server){
 
             if(userType === 'user'){
                 await userModel.findByIdAndUpdate(userId, { socketId: socket.id});
-                  console.log(`${userType} is connected as ${socket.id}`);
+                   
             } else if (userType === 'captain'){
-                await captainModel.findByIdAndUpdate(userId ,{ socketId: socket.id });
-                  console.log(`  ${userType} connected on id${socket.id} `);
+            await captainModel.findByIdAndUpdate(userId ,{ socketId: socket.id });
+             
+            socket.join('captains');
+                   
+
             }
         });
 
@@ -75,4 +78,10 @@ const sendMessageToSocketId = (socketId, messageObject)=>{
     }
 }
 
-module.exports = { initializeSocket, sendMessageToSocketId };
+const getIO = () => {
+    if (!io) {
+        throw new Error("Socket.io not initialized");
+    }
+    return io;
+};
+module.exports = { initializeSocket, sendMessageToSocketId, getIO };

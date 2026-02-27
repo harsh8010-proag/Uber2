@@ -26,10 +26,11 @@ const CaptainHome = () => {
  
   const RidePopUpPanelRef = useRef(null);
   const ConfirmRidePopupPanelRef = useRef(null);
+  const rideRef = useRef(null);
 
   const {socket} = useContext(SocketContext);
   const {captain} = useContext(CaptainDataContext);
- 
+   
 
 useEffect(() => {
  
@@ -60,14 +61,62 @@ useEffect(() => {
   updateLocation();
 
   socket.on('new-ride',(data)=>{
-    
+   const currentRide = rideRef.current;
+
+  if(currentRide && currentRide.status !== 'pending'){
+          return;
+  }
+   
     setRide(data);
     setRidePopupPanel(true);
-  });
 
+  });
+  checkCurrentRide();
+ 
+ return () => {
+    socket.off('new-ride');
+     console.log("Ignoring new ride, captain busy");
+  };
 }, []);
 
+useEffect(() => {
 
+ rideRef.current = ride;
+  socket.on('ride-taken', (data) => {
+
+      if (ride?._id === data.rideId) {
+          setRidePopupPanel(false);
+           
+      }
+
+  });
+
+
+
+}, [ride]);
+ 
+  async function checkCurrentRide(){  
+    try{
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/captain-current-ride`,{
+        headers:{
+          Authorization : `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const rideData = response.data;
+      console.log('data',rideData);
+      setRide(rideData);
+     
+      if(rideData.status === 'pending'){  
+        setRidePopupPanel(true);
+      }
+      if(rideData.status === 'accepted'){
+        setConfirmRidePopupPanel(true);
+      }
+    }catch(err){
+      console.log('No active ride',err)
+    }
+  }
+ 
 async function confirmRide(){
      
   const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`,{
@@ -78,7 +127,15 @@ async function confirmRide(){
       Authorization : `Bearer ${localStorage.getItem('token')}`
     }
   })
-  
+   
+  if(response.status === 200){
+    
+    setRide(response.data);
+ 
+    setConfirmRidePopupPanel(true)
+    setRidePopupPanel(false)
+
+  }
    
 }
 
@@ -141,9 +198,9 @@ async function confirmRide(){
       ref={ConfirmRidePopupPanelRef}
       className='fixed w-full z-10 h-screen bottom-0 bg-white px-3 py-10 pt-12  '> 
        <ConfirmRidePopUp
-       ride={ride}
-        setConfirmRidePopupPanel={setConfirmRidePopupPanel}
-         setRidePopupPanel={setRidePopupPanel}/>
+          ride={ride}
+          setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+          setRidePopupPanel={setRidePopupPanel}/>
       </div>
     </div>
   )

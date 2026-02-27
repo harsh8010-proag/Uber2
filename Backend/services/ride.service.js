@@ -57,6 +57,8 @@ function getOtp(num){
 module.exports.createRide = async ({
     user, pickup, destination, vehicleType, paymentMethod
 }) => {
+
+    
     if(!user || !pickup || !destination || !vehicleType || !paymentMethod){
         throw new Error('All fields are required');
     }
@@ -83,19 +85,18 @@ module.exports.confirmRide = async ({rideId, captain}) =>{
         throw new Error('Ride id is required');
     }
      
-   await rideModel.findOneAndUpdate({
-    _id: rideId
+   const ride = await rideModel.findOneAndUpdate({
+    _id: rideId,
+    status:'pending'
    },{
     status:'accepted',
     captain: captain._id
-   }) 
+   },{ new: true }).populate('user').populate('captain').select('+otp'); 
 
-  const ride=await rideModel.findOne({
-    _id: rideId
-  }).populate('user').populate('captain').select('+otp');
-
+  
+console.log(ride);
   if(!ride){
-     throw new Error('Ride not found');
+     throw new Error('Ride already accepted by another captain');
   }
 
   return ride;
@@ -135,7 +136,7 @@ module.exports.cancelRide = async({ rideId,  captain}) => {
     await rideModel.findOneAndUpdate({
         _id: rideId
     },{
-        status: 'cancel'
+        status: 'cancelled'
     })
 
     return ride;

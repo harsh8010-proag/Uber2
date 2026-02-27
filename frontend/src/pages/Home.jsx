@@ -9,7 +9,7 @@ import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
 import ConfirmRide from '../components/ConfirmRide';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SocketContext } from '../contaxt/SocketContext';
 import UserContext, { UserDataContext } from '../contaxt/UserContext';
 import LiveTracking from '../components/LiveTracking';
@@ -250,6 +250,8 @@ if (!pickup.trim() || !destination.trim()) {
  } 
 
  async function createRide(){
+
+  try{
   const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`,{
     pickup,
     destination,
@@ -260,7 +262,14 @@ if (!pickup.trim() || !destination.trim()) {
       Authorization : `Bearer ${localStorage.getItem('token')}`                 
     }
   })
+  if(response.status === 201){
+setVehicleFound(true);
+setConfirmRidePanel(false);
+  } 
+ } catch(error){
+     toast.info(error.response?.data?.message || "Something went wrong");
  }
+}
 
  const handlePayment=async()=>{
  await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/pay`,{
@@ -282,16 +291,11 @@ if (!pickup.trim() || !destination.trim()) {
     {/* Popup Box */}
     <div className="bg-white rounded-lg p-5 w-[90%] max-w-sm shadow-xl">
       
-      <p className="text-center font-semibold text-lg  text-zinc-600">
-        Pending Payment
+      <p className="text-center font-semibold text-lg  text-green-700">
+        Your ride is completed successfuly.
       </p>
 
-      <div className="flex items-center gap-5 p-3 border-b-2">
-        <img src={upi} alt="upi" className="h-[40px]" />
-        <div>
-          <h3 className="text-lg font-medium">₹{pendingRide?.fare}</h3>
-        </div>
-      </div>
+     
 
    <div className='flex items-center gap-5 p-3 border-b-2'>
     <i className="text-lg ri-map-pin-2-fill"></i>
@@ -299,7 +303,16 @@ if (!pickup.trim() || !destination.trim()) {
         <p className='text-sm -mt-1 text-gray-600'>{pendingRide?.destination}</p>
         </div>
     </div>
-<p className='text-sm text-zinc-500'>Your ride is completed. Please make the payment.</p>
+<p className='text-md text-yellow-700'> Please make the payment.</p>
+     <div className="flex items-center gap-5 p-3  ">
+        <img src={upi} alt="upi" className="h-[40px]" />
+        <div>
+          <h3 className="text-lg font-medium">₹{pendingRide?.fare}</h3>
+        </div>
+      </div>
+
+
+
       <button
         onClick={handlePayment}
         className="bg-green-500 text-lg text-white font-semibold rounded-lg w-full mt-4 py-2"
@@ -315,7 +328,12 @@ if (!pickup.trim() || !destination.trim()) {
               <h1 className='inter-harsh2  text-orange-500 '>
                 A<span className='text-black'>ber</span>
               </h1>
+              
             </div>
+            <div className='flex w-full items-center justify-end fixed z-50 top-[50px]'>
+                      
+                       
+                      </div>
       <div className="h-screen w-full">
         
         
@@ -428,6 +446,7 @@ if (!pickup.trim() || !destination.trim()) {
              <div  
              ref={WaitingForDriverRef}       
              className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 '>
+            
             <WaitingForDriver 
             ride={ride}
             paymentMethod={paymentMethod}

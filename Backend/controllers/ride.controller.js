@@ -14,11 +14,10 @@ module.exports.createRide = async (req , res) =>{
         });
     }
 
-    const {  pickup, destination, vehicleType ,paymentMethod} =  req.body;
+    const {pickup,destination,vehicleType,paymentMethod} = req.body;
  
     try{
-        console.log("User:", req.user);
-console.log("User ID:", req.user._id);
+ 
 
 
         const activeRide = await rideModel.findOne({
@@ -35,7 +34,7 @@ console.log("User ID:", req.user._id);
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
      
 
-        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng, 30);
+        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng, 30,vehicleType);
            
         if(captainsInRadius.length === 0){
             ride.status = 'cancelled'
@@ -317,7 +316,21 @@ module.exports.getRideById = async (req,res) =>{
 } 
  
  
-   
+ module.exports.getActiveRide = async (req, res) => {
+  const ride = await rideModel.findOne({
+    user: req.user._id,
+    status: { $in: ["pending", "accepted", "started"] }
+  }).populate("captain").populate('user');
+
+  if (!ride) {
+    return res.status(200).json({ active: false });
+  }
+
+  res.status(200).json({
+    active: true,
+    ride
+  });
+};  
 
 
 

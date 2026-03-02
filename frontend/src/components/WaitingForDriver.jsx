@@ -9,8 +9,8 @@ const WaitingForDriver = (props) => {
                 className='h-10'
                 src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=956/height=538/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yOWZiYjhiMC03NWIxLTRlMmEtODUzMy0zYTM2NGU3MDQyZmEucG5n" alt="" />
                 <div>
-                    <h2 className='text-lg font-medium'>{props.ride?.captain.fullname.firstname}</h2>
-                    <h4 className='text-xl font-semibold -mt-1 -mb-1'>{props.ride?.captain.vehicle.plate}</h4>
+                    <h2 className='text-lg font-medium'>{props.ride?.captain?.fullname?.firstname}</h2>
+                    <h4 className='text-xl font-semibold -mt-1 -mb-1'>{props.ride?.captain?.vehicle?.plate}</h4>
                     
                     <h1 className='text-lg font-semibold'>{props.ride?.otp}</h1>
                 </div>

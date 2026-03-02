@@ -88,11 +88,12 @@ module.exports.getAutoCompleteSuggestions = async (input) =>{
     }
 }
 
-module.exports.getCaptainsInTheRadius = async (ltd,lng,radius) =>{
+module.exports.getCaptainsInTheRadius = async (ltd,lng,radius,vehicleType) =>{
     //radius in km 
     // console.log(`PicupCordinates ltd:${ltd}: lng:${lng}`)
    
   const captains = await captainModel.find({
+    "vehicle.vehicleType": vehicleType ,
         "vehicle.location": {  
             $geoWithin: {
                 $centerSphere: [ 

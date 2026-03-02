@@ -24,7 +24,8 @@
             message:'Captain already exist' 
         }); 
     } 
- 
+  
+
     const hashedPassword = await captainModel.hashPassword(password); 
  
     const captain = await captainService.createCaptain({ 
@@ -37,7 +38,9 @@
         capacity: vehicle.capacity, 
         vehicleType: vehicle.vehicleType 
     }); 
-
+ 
+    captain.status = "active";
+    await captain.save();
     const token = captain.generateAuthToken();
 
     res.status(201).json({ token, captain});
@@ -45,8 +48,7 @@
 
 
 module.exports.loginCaptain = async (req,res,next) =>{
-    const errors = validationResult(req);
-    
+    const errors = validationResult(req); 
   
 
     if(!errors.isEmpty()){
@@ -65,6 +67,11 @@ if(!captain){
         message: 'Incalid email or password'    
     });
 }
+
+captain.status = 'active';
+await captain.save();
+
+
 const isMatch = await captain.comparePassword(password);
 if(!isMatch){
     return res.status(401).json({
@@ -76,7 +83,8 @@ const token = captain.generateAuthToken();
     res.cookie('token',token);
     res.status(200).json({
     token , captain
-    });}
+    });
+}
 
  module.exports.getCaptainProfile = async (req, res, next) => {
 
@@ -127,6 +135,11 @@ module.exports.logoutCaptain = async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];
 
     await blackListTokenModel.create({ token });
+
+    await captainModel.findByIdAndUpdate(req.captain._id,{
+        status : 'inactive',
+        socketId: null
+    });
 
     res.clearCookie('token');
 

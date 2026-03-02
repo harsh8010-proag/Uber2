@@ -94,6 +94,46 @@ socket.on('ride-ended',()=>{
 
 }, [socket, navigate]);
 
+useEffect(() => {
+  checkActiveRide();
+}, []);
+
+const checkActiveRide = async () => {
+
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/rides/active`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    );
+
+    if (res.data.active) {
+
+      const activeRide = res.data.ride;
+      console.log(activeRide);
+      setRide(activeRide);
+
+      if (activeRide.status === "pending") {
+        setVehicleFound(true);
+      }
+
+      if (activeRide.status === "accepted") {
+        setWaitingForDriver(true);
+      }
+
+      if (activeRide.status === "started") {
+        navigate("/ongoing", { state: { ride: activeRide } });
+      }
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
   const checkPendingPayment = async()=>{
     const res =await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/pending-payment`,
       {
@@ -262,7 +302,9 @@ if (!pickup.trim() || !destination.trim()) {
       Authorization : `Bearer ${localStorage.getItem('token')}`                 
     }
   })
+  
   if(response.status === 201){
+    setRide(response.data)
 setVehicleFound(true);
 setConfirmRidePanel(false);
   } 
@@ -436,6 +478,7 @@ setConfirmRidePanel(false);
              className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 translate-y-full'>
              <LookingForDriver 
              pickup={pickup}
+             ride={ride}
              destination={destination}
              fare = {fare}
              vehicleType ={vehicleType}

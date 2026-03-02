@@ -20,14 +20,14 @@ const LookingForDriver = (props) => {
             <div className='flex gap-2 flex-col justify-between items-center'>
                 <img
                     className='h-20'
-                    src={vehicleimage} alt={props.vehicleType} />
+                    src={vehicleimage} alt={props.ride?.vehicleType} />
                 <div className='w-full mt-5'>
                     <div className='flex items-center gap-5 p-3 border-b-2 border-gray-500'>
 
                         <i className="ri-map-pin-user-fill text-lg"></i>
                         <div >
                             
-                            <p className='text-sm -mt-1 text-gray-600'>{props.pickup} </p>
+                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.pickup} </p>
                         </div>
                     </div>
 
@@ -35,7 +35,7 @@ const LookingForDriver = (props) => {
                         <i className="text-lg ri-map-pin-fill"></i>
                         <div >
                             
-                            <p className='text-sm -mt-1 text-gray-600'>{props.destination}</p>
+                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.destination}</p>
                         </div>
 
                     </div>
@@ -45,7 +45,7 @@ const LookingForDriver = (props) => {
                         {props.paymentMethod==='cash'?<i className="text-lg  text-green-700 ri-cash-line"></i>:<img src={upiimg} alt='upi' className='h-[50px]'/>}
                       
                         <div >
-                            <h3 className='text-lg font-medium'>₹{props.fare[props.vehicleType]}</h3>
+                            <h3 className='text-lg font-medium'>₹{props.ride?.fare }</h3>
                             {props.paymentMethod==='cash'?<p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>:''}
                             
                         </div>

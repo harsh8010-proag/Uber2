@@ -61,7 +61,9 @@ await captainModel.findByIdAndUpdate(userId,
 
  });
        
-       socket.on('disconnect',()=> {
+       socket.on('disconnect',async()=> {
+         
+         
         console.log(`Client disconnected : ${socket.id}`);
        });
     });

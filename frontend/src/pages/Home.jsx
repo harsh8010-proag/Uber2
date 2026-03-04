@@ -78,18 +78,25 @@ import upi from '../assets/upi.webp'
 
     setWaitingForDriver(false);
     setVehicleFound(true);
-  });
+    });
 
 socket.on('ride-ended',()=>{
      
        checkPendingPayment()
-    })
+    });
+
+socket.on('ride-auto-cancelled',()=>{
+      toast.info('your ride not acsepted');
+      setVehicleFound(false);
+      setVehiclePanel(false)
+    });
    
   return () => {
     socket.off('ride-confirmed');
     socket.off('ride-started');
     socket.off('ride-canceled');
-    socket.off('ride-pending')
+    socket.off('ride-pending');
+    socket.off('ride-auto-cancelled');
   };
 
 }, [socket, navigate]);
@@ -181,8 +188,8 @@ const handlePickupChange = async (e) => {
             })
             setDestinationSuggestions(response.data)
            
-        } catch(err) {
-          console.log(err);
+        } catch(err){
+          console.log(err);                                                                             
         }
     }
       const submitHandler = (e) => {

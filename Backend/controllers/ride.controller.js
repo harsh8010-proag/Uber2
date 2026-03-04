@@ -17,9 +17,6 @@ module.exports.createRide = async (req , res) =>{
     const {pickup,destination,vehicleType,paymentMethod} = req.body;
  
     try{
- 
-
-
         const activeRide = await rideModel.findOne({
           user:req.user._id,
           status:{$in:['pending','accepted','ongoing']}
@@ -30,7 +27,7 @@ module.exports.createRide = async (req , res) =>{
                 message:'you already have an acive ride'
             })
         }
-        const ride = await rideService.createRide({ user: req.user._id, pickup, destination, vehicleType,paymentMethod});
+        const ride = await rideService.createRide({ user: req.user._id, pickup, destination, vehicleType, paymentMethod });
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
      
 
@@ -44,14 +41,12 @@ module.exports.createRide = async (req , res) =>{
                 message: 'No captains available nearby'
             })
         }
-        // console.log(captainsInRadius);
-
+ 
         ride.otp = "";
         
         const rideWithUser = await rideModel.findOne({ _id: ride._id}).populate('user');
         
-        
-        captainsInRadius.map(captain =>{
+         captainsInRadius.map(captain =>{
 
             sendMessageToSocketId(captain.socketId,{
                 event: 'new-ride',
@@ -59,7 +54,27 @@ module.exports.createRide = async (req , res) =>{
             })
         })         
 
-        
+      setTimeout(async ()=>{
+        try{
+            const rideToCancel = await rideModel.findById(ride._id);
+
+            if(rideToCancel && rideToCancel.status === 'pending'){
+                 rideToCancel.status = 'cancelled';
+                 await rideToCancel.save();
+            }
+
+            if(rideWithUser.user.socketId){
+                sendMessageToSocketId(rideWithUser.user.socketId,{
+                    event : 'ride-auto-cancelled',
+                    data  : rideToCancel
+                });
+            }  
+
+           }catch (err){
+            console.log('Auto cancel error', err);
+        }
+      },30000);  
+
       return res.status(201).json(ride);
 
     }catch(err){
@@ -67,7 +82,6 @@ module.exports.createRide = async (req , res) =>{
         return res.status(500).json({ message: err.message});
     }
 };
-
 
 module.exports.getFare = async (req,res) =>{
 
@@ -122,7 +136,6 @@ module.exports.confirmRide = async (req,res) =>{
     }
 
 }
-
 
 module.exports.startRide = async (req, res) =>{
 
@@ -271,7 +284,6 @@ module.exports.payRide= async (req,res) =>{
 }
 }
 
-
 module.exports.getCaptaininCurrentRide = async (req,res) =>{
              
     const assigenedRide = await rideModel.findOne({
@@ -282,12 +294,14 @@ module.exports.getCaptaininCurrentRide = async (req,res) =>{
     if(assigenedRide){
           return res.status(200).json(assigenedRide);
     }
-    
+ 
    const pendingRide = await rideModel.findOne({
+         vehicleType:req.captain.vehicle.vehicleType,
          status: 'pending'
     }).populate('user').sort({ createdAt: -1 });
  
-        if(pendingRide){  return res.status(200).json(pendingRide);
+        if(pendingRide){ 
+             return res.status(200).json(pendingRide);
     }
 
     if(!assigenedRide && !pendingRide ){
@@ -298,8 +312,6 @@ module.exports.getCaptaininCurrentRide = async (req,res) =>{
 
    
 };
-
- 
 
 module.exports.getRideById = async (req,res) =>{
     const {rideId} = req.body

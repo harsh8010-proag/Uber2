@@ -71,6 +71,11 @@ useEffect(() => {
     setRidePopupPanel(true);
 
   });
+
+socket.on('ride-auto-cancelled',()=>{
+      setRidePopupPanel(false);
+      
+    });
   checkCurrentRide();
  
  return () => {
@@ -79,14 +84,15 @@ useEffect(() => {
   };
 }, []);
 
+
+
 useEffect(() => {
 
  rideRef.current = ride;
   socket.on('ride-taken', (data) => {
 
       if (ride?._id === data.rideId) {
-          setRidePopupPanel(false);
-           
+          setRidePopupPanel(false);           
       }
 
   });

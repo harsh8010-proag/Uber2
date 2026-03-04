@@ -56,7 +56,7 @@ function getOtp(num){
 
 module.exports.createRide = async ({
     user, pickup, destination, vehicleType, paymentMethod
-}) => {
+}) => {                              
 
     
     if(!user || !pickup || !destination || !vehicleType || !paymentMethod){
@@ -72,7 +72,8 @@ module.exports.createRide = async ({
         otp:getOtp(6),
         fare: fare[ vehicleType ],
         paymentMethod,
-        paymentStatus:'pending'
+        paymentStatus:'pending',
+        vehicleType
     })
 
     return ride;
@@ -93,8 +94,7 @@ module.exports.confirmRide = async ({rideId, captain}) =>{
     captain: captain._id
    },{ new: true }).populate('user').populate('captain').select('+otp'); 
 
-  
-console.log(ride);
+ 
   if(!ride){
      throw new Error('Ride already accepted by another captain');
   }
@@ -105,9 +105,7 @@ console.log(ride);
 
 module.exports.startRide = async({ rideId, otp, captain}) => {
 
- 
-
-    const ride = await rideModel.findOne({
+     const ride = await rideModel.findOne({
         _id:rideId
     }).populate('user').populate('captain').select('+otp');
 

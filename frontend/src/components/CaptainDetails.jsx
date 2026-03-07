@@ -14,22 +14,31 @@ const CaptainDetails = () => {
 
     
     
+ useEffect(() => {
+
+  const handlePayment = (data) => {
+    setTotalEarnings(data.totalEarnings);
+    toast.success("Payment received");
+  };
+
+  socket.on("payment-received", handlePayment);
+
+  return () => {
+    socket.off("payment-received", handlePayment);
+  };
+
+}, [socket]);
+
+
+
     useEffect(()=>{
-       socket.on('payment-received',(data)=>{
-        setTotalEarnings(data.totalEarnings);
-
-        toast.success('payment-received');
-       });
-       
-useEffect(()=>{
-     setTotalEarnings(captain.totalEarnings);
-    },[totalEarnings]);
+     if(captain){
+   setTotalEarnings(captain.totalEarnings);
+ }
+    },[captain]);
 
 
-       return ()=>{
-        socket.off('payment-received');
-       }
-    },[socket])
+
     const baseUrl = import.meta.env.VITE_BASE_URL || '';
     const profileSrc = captain?.profileImage
         ? (captain.profileImage.startsWith('http') ? captain.profileImage : `${baseUrl}${captain.profileImage}`)
@@ -54,7 +63,7 @@ useEffect(()=>{
                 </Link>
                 <div>
                   
-                    <h4 className='text-xl font-semibold'><i class="ri-wallet-line mr-2 "></i>₹{totalEarnings} </h4>
+                    <h4 className='text-xl font-semibold'><i className="ri-wallet-line mr-2 "></i>₹{totalEarnings} </h4>
                     {/* <p className='text-md text-green-600'>Earned</p> */}
                 </div>
             </div>
@@ -79,4 +88,4 @@ useEffect(()=>{
     )
 }
 
-export default CaptainDetails
+export default CaptainDetails;

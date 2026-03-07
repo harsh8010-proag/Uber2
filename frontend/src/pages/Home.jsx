@@ -29,8 +29,9 @@ import upi from '../assets/upi.webp'
   const [ vehicleType, setVehicleType] =useState('');
   const [fare,setFare] =useState({});
   const [ride,setRide] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState('cash')
-  const [pendingRide,setPendingRide] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [pendingRide,setPendingRide] = useState('');
+ 
 
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriver, setWaitingForDriver] = useState(false);
@@ -77,7 +78,8 @@ import upi from '../assets/upi.webp'
     );
 
     setWaitingForDriver(false);
-    setVehicleFound(true);
+    setVehicleFound(false);
+    setVehiclePanel(false);
     });
 
 socket.on('ride-ended',()=>{

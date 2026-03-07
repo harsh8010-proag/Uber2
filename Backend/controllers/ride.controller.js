@@ -61,19 +61,21 @@ module.exports.createRide = async (req , res) =>{
             if(rideToCancel && rideToCancel.status === 'pending'){
                  rideToCancel.status = 'cancelled';
                  await rideToCancel.save();
-            }
 
-            if(rideWithUser.user.socketId){
+                     if(rideWithUser.user.socketId){
                 sendMessageToSocketId(rideWithUser.user.socketId,{
                     event : 'ride-auto-cancelled',
                     data  : rideToCancel
                 });
             }  
+            }
+
+        
 
            }catch (err){
             console.log('Auto cancel error', err);
         }
-      },30000);  
+      },60000);  
 
       return res.status(201).json(ride);
 
@@ -261,10 +263,14 @@ module.exports.payRide= async (req,res) =>{
         { new: true }).populate('captain');
  
     
-    await captainModel.findByIdAndUpdate(ride.captain._id,{
+    const captainwithEarning=await captainModel.findByIdAndUpdate(ride.captain._id,{
          $inc: { totalEarnings: ride.fare}
-   });
-   
+   },{ new: true });
+   console.log(captainwithEarning);
+   sendMessageToSocketId(ride.captain.socketId,{
+                    event : 'payment-received',
+                    data  : captainwithEarning
+                });
         if (!ride) {
    return res.status(404).json({
        message: "Ride not found"

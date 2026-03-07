@@ -1,12 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { CaptainDataContext } from '../contaxt/CaptanContext';
 import profile from '../assets/download.png';
+import { SocketContext } from '../contaxt/SocketContext';
+import { toast } from 'react-toastify';
+
 
 const CaptainDetails = () => {
+    const [totalEarnings,setTotalEarnings] = useState(0);
     const { captain  } = useContext(CaptainDataContext);
-     
+    const { socket }   = useContext(SocketContext)
+
+    
+    
+    useEffect(()=>{
+       socket.on('payment-received',(data)=>{
+        setTotalEarnings(data.totalEarnings);
+
+        toast.success('payment-received');
+       });
+       
+useEffect(()=>{
+     setTotalEarnings(captain.totalEarnings);
+    },[totalEarnings]);
+
+
+       return ()=>{
+        socket.off('payment-received');
+       }
+    },[socket])
     const baseUrl = import.meta.env.VITE_BASE_URL || '';
     const profileSrc = captain?.profileImage
         ? (captain.profileImage.startsWith('http') ? captain.profileImage : `${baseUrl}${captain.profileImage}`)
@@ -31,7 +54,7 @@ const CaptainDetails = () => {
                 </Link>
                 <div>
                   
-                    <h4 className='text-xl font-semibold'><i class="ri-wallet-line mr-2 "></i>₹{captain.totalEarnings} </h4>
+                    <h4 className='text-xl font-semibold'><i class="ri-wallet-line mr-2 "></i>₹{totalEarnings} </h4>
                     {/* <p className='text-md text-green-600'>Earned</p> */}
                 </div>
             </div>

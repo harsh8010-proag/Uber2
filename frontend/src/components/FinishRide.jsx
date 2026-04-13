@@ -20,7 +20,7 @@ const FinishRide = (props) => {
     }
      
     }
-
+const profileImg = props.ride?.user.profileImage?`${import.meta.env.VITE_BASE_URL}${props.ride.user.profileImage}`:dprofile;
 
   return (
     <div>
@@ -30,13 +30,20 @@ const FinishRide = (props) => {
             <h3 className='text-2xl font-semibold mb-5'>Finish this Ride</h3>
             <div className='flex items-center justify-between p-4 border-2 border-yellow-400 rounded-lg mt-4'>
                 <div className='flex items-center gap-3 '>
-                    <img className='h-12 rounded-full object-cover w-12' src={dprofile} alt="" />
+                    <img className='h-12 rounded-full object-cover w-12' src={profileImg} alt="" />
                     <h2 className='text-lg font-medium'>{props.ride?.user.fullname.firstname}</h2>
                 </div>
               
             </div>
             <div className='flex gap-2 justify-between flex-col items-center'>
                 <div className='w-full mt-5'>
+                    <div className='flex items-center gap-5 p-3 border-b-2'>
+                        <i className="text-lg ri-phone-fill"></i>
+                        <div>
+                 
+                            <p className='text-md   text-gray-600'>{props.ride?.user.mobileno}</p>
+                        </div>
+                    </div>
                     <div className='flex items-center gap-5 p-3 border-b-2'>
                         <i className="ri-map-pin-user-fill"></i>
                         <div>

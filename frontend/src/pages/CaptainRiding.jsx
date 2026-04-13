@@ -33,9 +33,9 @@ const CaptainRiding = () => {
    <div className='h-screen'>
         <div className='flex w-full items-center justify-end  fixed'>
        
-          <Link to={'/home'} className='m-2 text-white  h-10 w-10 bg-gray-700/70 flex items-center justify-center rounded-full'>
+          {/* <Link to={'/home'} className='m-2 text-white  h-10 w-10 bg-gray-700/70 flex items-center justify-center rounded-full cursur-pointer'>
             <i className="text-lg ri-home-5-line"></i>
-          </Link>
+          </Link> */}
         </div>
         <div className="h-4/5">
         
@@ -48,12 +48,12 @@ const CaptainRiding = () => {
         }}
         className='h-1/5 p-6 bg-yellow-400 flex items-center justify-between relative'>
 
-        <h5 className='p-1 text-center w-[95%] absolute top-0'
+        <h5 className='p-1 text-center w-[95%] absolute top-0 cursor-pointer'
                 onClick={() => {  }}><i className="text-3xl text-orange-500 ri-arrow-up-wide-line"></i></h5>
 
-        <h4 className='text-xl font-semibold'>4 KM away</h4>        
+        <h4 className='text-xl font-semibold'>Ride in Progress...</h4>        
         <button 
-        className='bg-green-600 text-white font-semibold p-3 px-10 rounded-lg'>Complete Ride</button>
+        className='bg-green-600 text-white font-semibold p-3 px-10 rounded-lg cursor-pointer' >Complete Ride</button>
         </div>
         
           <div

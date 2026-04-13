@@ -365,6 +365,23 @@ module.exports.getRideById = async (req,res) =>{
   });
 };  
 
+
+
+module.exports.getride = async (req,res) => {
+
+   const {rideId} = req.body;
+ 
+   let ride = await rideModel.findById(rideId).populate('captain');
+    
+   if(!ride){
+    res.status(404).json({message:'ride not found'})
+   }
+
+   res.status(200).json({ride})
+
+   
+    
+}
  
 
 

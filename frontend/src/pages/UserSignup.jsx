@@ -87,7 +87,7 @@ const UserSignup = () => {
     }
      }
   return (
-      <div className='h-screen py-15 sm:bg-gray-200  '>
+      <div className='min-h-screen py-5 sm:bg-gray-200  '>
     <div className='p-7 flex flex-col justify-between max-w-lg mx-auto bg-white shadow'>
       <div>            
          <div className="logo flex items-center mb-10">
@@ -155,13 +155,12 @@ const UserSignup = () => {
                    <input required
                    inputMode="numeric"
                    value={mobileno}
-                  
-
-                     type='tel'
-                     className='bg-[#eeeeee] rounded px-4 py-2 w-full text-lg mb-5 placeholder:text-same'
-                     onChange={(e)=>{
-                       const value = e.target.value.replace(/\D/g, "");
-                           if (value.length <= 10) {
+                   type='tel'
+                   placeholder='xxxxxxxxxx'
+                   className='bg-[#eeeeee] rounded px-4 py-2 w-full text-lg mb-5 placeholder:text-same'
+                   onChange={(e)=>{
+                   const value = e.target.value.replace(/\D/g, "");
+                    if (value.length <= 10) {
                        setMobileno(value);
                       } }}
                      />

@@ -81,7 +81,7 @@ const CaptainProfile = () => {
     <div>
       <h3 className="text-gray-500 text-sm">Rating</h3>
       <h2 className="text-3xl font-bold text-gray-800">
-        {captain?.rating || 0}
+        {captain?.rating ? captain.rating.toFixed(1) : 0}
       </h2>
       <p className="text-xs text-gray-500">
         {captain?.numReviews || 0} reviews

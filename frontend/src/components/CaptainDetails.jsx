@@ -86,7 +86,7 @@ const CaptainDetails = () => {
 </span>
  
             <span className="text-xs text-gray-600">
-              ({captain?.rating || 0}) • {captain?.numReviews || 0} reviews
+              ({captain?.rating ? captain.rating.toFixed(1) : 0}) • {captain?.numReviews || 0} reviews
             </span>
           </div>
 

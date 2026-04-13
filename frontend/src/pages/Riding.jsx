@@ -44,17 +44,21 @@ const Riding = () => {
     
 
  const [rideData, setRideData] = useState('');
-
+ 
+   
+ const rideId = ride._id;
+ 
  useEffect(() => {
   const fetchRide = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/rides/active`,
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/rides/getride`,{rideId},
         { withCredentials: true }
       );
 
-      if (res.data.active) {
+      if (res.status === 200 ) {
         setRideData(res.data.ride);
+ 
       }
 
     } catch (err) {
@@ -78,15 +82,15 @@ const Riding = () => {
 
     }
 useEffect(() => {
-  if (ride?.paymentStatus === 'paid') {
+  if (rideData?.paymentStatus === 'paid') {
     setIsPaid(true);
-    setShowReview(true);
+    
   }
 
-  if (ride?.paymentMethod === 'cash') {
+  if (rideData?.paymentMethod === 'cash') {
     setShowReview(true);
   }
-}, [ride]);
+}, [rideData]);
 
     const submitReview = async () => {
     
@@ -116,14 +120,14 @@ useEffect(() => {
             {showReview && (
                 <div className="fixed inset-0 bg-zinc-700/50 flex items-center justify-center z-50">
 
-                    <div className="bg-white p-6 rounded-2xl w-[90%] max-w-md shadow-lg relative">
+                    <div className="bg-white p-6 rounded-2xl w-[90%] max-w-md shadow-lg relative">  
                         <button
                             onClick={() => setShowReview(false)}
                             className="absolute top-2 right-3 text-lg font-semibold  text-blue-800 cursor-pointer "
                         >
                             x
                         </button>
-
+                        <p className='text-2xl text-green-700  mb-5'>Ride Complated <i className="ri-checkbox-circle-fill text-lg"></i></p>
                         <h3 className="text-lg font-semibold mb-3 text-center">
                             Rate your ride
                         </h3>
@@ -167,9 +171,9 @@ useEffect(() => {
                 <div className='flex items-center justify-between mt-2'>
                     <img className='h-12' src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg" alt="" />
                     <div className='text-right'>
-                        <h2 className='text-lg font-medium capitalize'>{ride?.captain.fullname.firstname}</h2>
-                        <h4 className='text-xl font-semibold -mt-1 -mb-1'>{ride?.captain.vehicle.plate}</h4>
-                        <h4 className='text-xl font-semibold mt-1 mb-1 text-zinc-600'><i className="ri-phone-fill text-black"></i>   {ride?.captain.mobileno}</h4>
+                        <h2 className='text-lg font-medium capitalize'>{rideData?.captain?.fullname?.firstname}</h2>
+                        <h4 className='text-xl font-semibold -mt-1 -mb-1'>{rideData?.captain?.vehicle.plate}</h4>
+                        <h4 className='text-xl font-semibold mt-1 mb-1 text-zinc-600'><i className="ri-phone-fill text-black"></i>   {rideData?.captain?.mobileno}</h4>
 
                     </div>
                 </div>
@@ -181,27 +185,27 @@ useEffect(() => {
                             <i className="text-lg ri-map-pin-2-fill"></i>
                             <div>
 
-                                <p className='text-sm -mt-1 text-gray-600'>{ride?.destination}</p>
+                                <p className='text-sm -mt-1 text-gray-600'>{rideData?.destination}</p>
                             </div>
                         </div>
                         <div className='flex items-center gap-5 p-3 border-b-2'>
-                            {ride?.paymentMethod === 'cash' ? <i className="text-lg  text-green-700 ri-cash-line "></i> : <img src={upi} alt='upi' className='h-[40px]' />}
+                            {rideData?.paymentMethod === 'cash' ? <i className="text-lg  text-green-700 ri-cash-line "></i> : <img src={upi} alt='upi' className='h-[40px]' />}
                             <div>
-                                <h3 className='text-lg font-medium'>₹{ride?.fare}</h3>
-                                {ride?.paymentMethod === 'cash' ? <p className='text-sm -mt-1 text-gray-600'>Cash Cash </p> : ''}
+                                <h3 className='text-lg font-medium'>₹{rideData?.fare}</h3>
+                                {rideData?.paymentMethod === 'cash' ? <p className='text-sm -mt-1 text-gray-600'>Cash Cash </p> : ''}
                             </div>
                         </div>
 
                         <div>
                             <div>
-                                {ride.paymentMethod === 'upi' && !isPaid ? (
+                                {rideData?.paymentMethod === 'upi' && !isPaid ? (
                                     <button
                                         onClick={handlePayment}
                                         className='bg-green-500 text-lg text-white font-semibold rounded-lg w-full m-2 p-2 cursor-pointer'>
                                         Make Payment
                                     </button>
-                                ) : ride.paymentMethod === 'upi' && isPaid ? (
-                                    <p className='text-green-700 font-medium text-center'> Payment Done ✅ </p>
+                                ) : rideData?.paymentMethod === 'upi' && isPaid ? (
+                                    <p className='text-green-700 font-medium text-center'> Payment Done  </p>
                                 ) : (
                                     <p className='text-green-700 font-medium'>Pay Cash</p>
                                 )}

@@ -202,7 +202,7 @@ async function confirmRide(){
 
        <div
       ref={ConfirmRidePopupPanelRef}
-      className='fixed w-full z-10 h-screen bottom-0 bg-white px-3 py-10 pt-12  '> 
+      className='fixed w-full z-10 min-h-screen bottom-0 bg-white px-3 py-10 pt-12  '> 
        <ConfirmRidePopUp
           ride={ride}
           setConfirmRidePopupPanel={setConfirmRidePopupPanel}

@@ -53,16 +53,16 @@ const Ongoing = () => {
     
 
   return (
-   <div className='h-screen relative  bg-zinc-200 lg:flex'>
+   <div className='h-screen relative  bg-zinc-200  '>
   
-            <div className='h-1/2 lg:h-auto '>
+            <div className='h-1/2  '>
                {/* <div className='flex w-full items-center justify-end fixed z-50 top-[50px]'>
                       
                         <Link to={'/home'} className='m-2 text-white  h-10 w-10 bg-gray-700/70 flex items-center justify-center rounded-full '>
                           <i className="text-lg font-medium ri-home-5-line"></i>
                         </Link>
                       </div> */}
-                      <div className="h-5/5 lg:h-auto">
+                      <div className="h-5/5  ">
                        <LiveTracking/>
                       </div>
 
@@ -94,7 +94,7 @@ const Ongoing = () => {
                             {ride?.paymentMethod==='cash'?<i className="text-lg  text-green-700 ri-cash-line "></i>:<img src={upi} alt='upi' className='h-[40px]'/>}
                             <div>
                                 <h3 className='text-lg font-medium'>₹{ride?.fare}</h3>
-                                {ride?.paymentMethod==='cash'?<p className='text-sm -mt-1 text-gray-600'>Cash Cash </p>:''}
+                                {ride?.paymentMethod==='cash'?<p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>:''}
                             </div>
                         </div>
                           

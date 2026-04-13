@@ -12,9 +12,7 @@ const FinishRide = (props) => {
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/end-ride`,{
         rideId: props.ride._id
     },{
-        headers:{
-            Authorization:`Bearer ${localStorage.getItem('token')}`
-        }
+        withCredentials: true
     })    
  
     if(response.status === 200){
@@ -66,7 +64,7 @@ const FinishRide = (props) => {
 
                     <button
                         onClick={endRide}
-                        className='w-full mt-5 flex  text-lg justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Finish Ride</button>
+                        className='w-full mt-5 flex  text-lg justify-center bg-green-600 text-white font-semibold p-3 rounded-lg cursor-pointer'>Finish Ride</button>
 
 
                 </div>

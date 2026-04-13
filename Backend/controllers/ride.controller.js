@@ -31,7 +31,7 @@ module.exports.createRide = async (req , res) =>{
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
      
 
-        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng, 30,vehicleType);
+        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng, 2,vehicleType);
            
         if(captainsInRadius.length === 0){
             ride.status = 'cancelled'
@@ -46,7 +46,7 @@ module.exports.createRide = async (req , res) =>{
         
         const rideWithUser = await rideModel.findOne({ _id: ride._id}).populate('user');
         
-         captainsInRadius.map(captain =>{
+         captainsInRadius.forEach(captain =>{
 
             sendMessageToSocketId(captain.socketId,{
                 event: 'new-ride',
@@ -66,13 +66,21 @@ module.exports.createRide = async (req , res) =>{
                 sendMessageToSocketId(rideWithUser.user.socketId,{
                     event : 'ride-auto-cancelled',
                     data  : rideToCancel
-                });
-            }  
+                }); } 
+            
+                           captainsInRadius.forEach(captain =>{
+
+            sendMessageToSocketId(captain.socketId,{
+                event: 'ride-auto-cancelled',
+                data: rideToCancel
+            })
+        })
+            
             }
 
-        
+ 
 
-           }catch (err){
+         }catch (err){
             console.log('Auto cancel error', err);
         }
       },60000);  
@@ -260,8 +268,8 @@ module.exports.payRide= async (req,res) =>{
          },{
              paymentStatus: 'paid'
          },
-        { new: true }).populate('captain');
- 
+        { returnDocument: "after" }).populate('captain');
+ console.log(ride)
     
     const captainwithEarning=await captainModel.findByIdAndUpdate(ride.captain._id,{
          $inc: { totalEarnings: ride.fare}
@@ -335,23 +343,28 @@ module.exports.getRideById = async (req,res) =>{
  
  
  module.exports.getActiveRide = async (req, res) => {
-  const ride = await rideModel.findOne({
+
+  let ride = await rideModel.findOne({
     user: req.user._id,
-    status: { $in: ["pending", "accepted", "started"] }
+    status: { $in: ["pending", "accepted", "ongoing"] }
   }).populate("captain").populate('user');
 
+  if(ride && ride.status === 'accepted'){
+    ride = await rideModel.findById(ride._id).select('+otp').populate('captain').populate('user');
+  }
+
+  
   if (!ride) {
     return res.status(200).json({ active: false });
   }
 
   res.status(200).json({
     active: true,
+    status:ride.status,
     ride
   });
 };  
 
-
-
-
+ 
 
 

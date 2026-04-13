@@ -3,14 +3,14 @@ const userService = require('../services/user.service');
 const { validationResult } = require('express-validator');
 const blackListTokenModel = require('../models/blacklistToken.model');
 
-module.exports.registerUser = async (req, res, next) => {
+module.exports.registerUser = async (req, res) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { fullname, email, password } = req.body;
+    const { fullname, email, password , mobileno} = req.body;
 
     const isUserAlready = await userModel.findOne({ email });
 
@@ -24,12 +24,18 @@ module.exports.registerUser = async (req, res, next) => {
         firstname: fullname.firstname,
         lastname: fullname.lastname,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        mobileno
     });
 
     const token = user.generateAuthToken();
+    res.cookie('token',token,{
+  httpOnly: true,
+  sameSite: "Lax",
+  secure: false
+})
 
-    res.status(201).json({ token, user });
+    res.status(201).json({  user });
 
 
 }
@@ -37,7 +43,7 @@ module.exports.registerUser = async (req, res, next) => {
 
 
 
-module.exports.loginUser =async (req, res, next)=>{
+module.exports.loginUser =async (req, res)=>{
     
     const errors = validationResult(req);
 
@@ -61,22 +67,61 @@ module.exports.loginUser =async (req, res, next)=>{
 
     const token = user.generateAuthToken();
 
-    res.cookie('token', token );
+    res.cookie('token', token ,{
+  httpOnly: true,
+  sameSite: "Lax",
+  secure: false
+});
 
-    res.status(200).json({token, user });   
+    res.status(200).json({ user });   
 }
 
-module.exports.getUserProfile = async (req,res,next) => {  
+module.exports.getUserProfile = async (req,res) => {  
       res.status(200).json(req.user);
 }
 
-module.exports.logoutUser = async (req, res, next) => {
-    
-    const token = req.cookies.token || req.headers.authorization.split(' ')[ 1 ];
+module.exports.updateUserProfile = async(req,res) =>{
+     try{
+        const userId = req.user._id;
 
-    await blackListTokenModel.create({ token });
+        const {firstname , lastname} = req.body;
+
+        let updateData = {
+            fullname:{
+                firstname,
+                 lastname
+            }
+        }
+
+        if(req.file){
+            updateData.profileImage = `/uploads/user/${req.file.filename}`
+        }
+
+        const user = await userModel.findByIdAndUpdate(
+            userId,updateData,{new:true}
+        )
+
+        res.status(200).json({user})
+     }catch(err){
+        res.status(500).json({message:'updation faild',err:err.message})
+     }
+}
+
+
+
+module.exports.logoutUser = async (req, res) => {
     
-    res.clearCookie('token');
+    const token = req.cookies.token  
+
+    if(token){
+    await blackListTokenModel.create({ token });
+    }
+    
+    res.clearCookie('token',{
+  httpOnly: true,
+  sameSite: "Lax",
+  secure: false
+});
     res.status(200).json({ message: 'Logged out' });
  
 

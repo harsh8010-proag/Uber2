@@ -22,7 +22,7 @@ const ConfirmRide = (props) => {
       <h3 className='text-2xl font-semibold mb-3'>Confirm your Ride</h3>
       <div className='flex gap-2 flex-col justify-between items-center'>
         <img
-          className='h-20'
+          className='h-20'  
           src={vehicleimage}  alt="car" />
         <div className='w-full mt-5'>
           <div className='flex items-center gap-5 p-3 border-b-2 border-gray-500'>
@@ -75,7 +75,7 @@ const ConfirmRide = (props) => {
             onClick={() => {
               props.createRide();
             }}
-            className='w-full mt-5 bg-green-600 font-semibold p-2 rounded-lg text-white'>Confirm</button>
+            className='w-full mt-5 bg-green-600 font-semibold p-2 rounded-lg text-white cursor-pointer'>Confirm</button>
         </div>
       </div>
     </div>

@@ -18,6 +18,12 @@ import CaptainLogout from './pages/CaptainLogout';
 import Ongoing from './pages/Ongoing';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import UserProfile from './pages/UserProfile';
+import UserEditProfile from './pages/UserEditProfile';
+import CaptainEdit from './pages/CaptainEdit';
+import ShowCaptainRidehistory from './components/ShowCaptainRidehistory';
+import About from './components/About';
+import Help from './components/Help';
 
 
 const App = () => {
@@ -41,7 +47,18 @@ const App = () => {
         <Route path='/captain-riding' element={<CaptainRiding />} />
         <Route path='/signup' element={<UserSignup />} />
         <Route path='/captain-login' element={<Captainlogin />} />
-        <Route path='/captain-signup' element={<Captainsignup />} />
+        <Route path='/captain-signup' element={<Captainsignup/>} />
+        <Route path='/help' element={<Help />} />
+        <Route path='/user-profile' element={
+          <UserProtectWrapper>
+          <UserProfile/>
+          </UserProtectWrapper>}/>
+
+          <Route path='/user-profile/edit' element={
+          <UserProtectWrapper>
+          <UserEditProfile/>
+          </UserProtectWrapper>}/>
+
         <Route path='/user/logout'
           element={<UserProtectWrapper>
             <UserLogout />
@@ -52,6 +69,8 @@ const App = () => {
           <CaptainProtectWrapper>
             <CaptainHome />
           </CaptainProtectWrapper>} />
+
+          
 
         <Route path='/captain-profile' element={
           <CaptainProtectWrapper>
@@ -64,6 +83,23 @@ const App = () => {
           </CaptainProtectWrapper>
         } />
 
+        <Route path='/captain/edit' element={
+          <CaptainProtectWrapper>
+            <CaptainEdit/>
+          </CaptainProtectWrapper>
+        } />
+
+      <Route path='/captain/history' element={
+        <CaptainProtectWrapper>
+          <ShowCaptainRidehistory/>
+        </CaptainProtectWrapper>
+      }/>
+
+      <Route path='/about' element={
+        
+        <About/>
+       
+      }/>
       </Routes>
 
     </div>

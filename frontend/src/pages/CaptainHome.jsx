@@ -104,9 +104,9 @@ useEffect(() => {
   async function checkCurrentRide(){  
     try{
       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/captain-current-ride`,{
-        headers:{
-          Authorization : `Bearer ${localStorage.getItem('token')}`
-        }
+       
+   withCredentials: true
+
       });
       const rideData = response.data;
       console.log('data',rideData);
@@ -129,9 +129,9 @@ async function confirmRide(){
     rideId: ride._id,
     captain: captain._id,
   },{
-    headers:{
-      Authorization : `Bearer ${localStorage.getItem('token')}`
-    }
+    
+   withCredentials: true
+
   })
    
   if(response.status === 200){
@@ -185,7 +185,7 @@ async function confirmRide(){
       <LiveTracking/>
       </div>
 
-      <div className='h-2/5 p-6'>
+      <div className='min-h-2/5 p-6 bg-zinc-100 '>
       <CaptainDetails/>
       </div>
       

@@ -8,14 +8,15 @@
 
  
  
- module.exports.registerCaptain = async (req, res, next)=>{ 
+ module.exports.registerCaptain = async (req, res)=>{ 
 
     const errors = validationResult(req); 
     if(!errors.isEmpty()){ 
         return res.status(400).json({ errors: errors.array() }); 
     } 
  
-    const { fullname, email, password, vehicle } = req.body; 
+    const { fullname, email, password, vehicle ,mobileno } = req.body; 
+    console.log(mobileno)
  
     const isCapatinAlreadyExist = await captainModel.findOne({ email }); 
  
@@ -36,18 +37,23 @@
         color : vehicle.color, 
         plate : vehicle.plate, 
         capacity: vehicle.capacity, 
-        vehicleType: vehicle.vehicleType 
+        vehicleType: vehicle.vehicleType ,
+        mobileno: mobileno
     }); 
  
     captain.status = "active";
     await captain.save();
     const token = captain.generateAuthToken();
 
-    res.status(201).json({ token, captain});
+    res.cookie('token',token,{
+        httpOnly:true
+    })
+
+    res.status(201).json({captain});
  }
 
 
-module.exports.loginCaptain = async (req,res,next) =>{
+module.exports.loginCaptain = async (req,res) =>{
     const errors = validationResult(req); 
   
 
@@ -80,13 +86,17 @@ if(!isMatch){
 
 } 
 const token = captain.generateAuthToken();
-    res.cookie('token',token);
+
+    res.cookie('token',token,{
+         httpOnly:true
+         });
+
     res.status(200).json({
-    token , captain
+     captain
     });
 }
 
- module.exports.getCaptainProfile = async (req, res, next) => {
+ module.exports.getCaptainProfile = async (req, res) => {
 
      
 
@@ -96,43 +106,52 @@ const token = captain.generateAuthToken();
     })
  };
 
- module.exports.updateCaptainProfile = async (req, res, next) => {
-    try {
-        const captainId = req.captain._id;
-        const { fullname, vehicle, profileImage: profileImageBase64 } = req.body;
-        let profileImagePath = null;
 
-        if (profileImageBase64 && typeof profileImageBase64 === 'string' && profileImageBase64.startsWith('data:image/')) {
-            const uploadsDir = path.join(__dirname, '..', 'uploads', 'captain');
-            if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
-            const match = profileImageBase64.match(/^data:image\/(\w+);base64,(.+)$/);
-            const ext = match ? (match[1] === 'jpeg' ? 'jpg' : match[1]) : 'png';
-            const filename = `${captainId}-${Date.now()}.${ext}`;
-            const filePath = path.join(uploadsDir, filename);
-            const base64Data = (match && match[2]) || profileImageBase64.split(',')[1];
-            if (base64Data) {
-                fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
-                profileImagePath = `/uploads/captain/${filename}`;
-            }
-        }
+ module.exports.updateCaptainProfile = async (req, res) =>{
 
-        const updates = {};
-        if (fullname) updates.fullname = fullname;
-        if (vehicle) updates.vehicle = vehicle;
-          
+  try{
+  const captainId = req.captain._id;
 
-        const captain = await captainService.updateCaptainProfile(captainId, updates, profileImagePath);
+  const {
+    firstname,lastname,color,plate,capacity,vehicleType
+  } = req.body;
 
-       
-
-        res.status(200).json({ captain });
-    } catch (err) {
-        next(err);
+ 
+  let updateData = {
+    fullname:{
+        firstname,
+        lastname,
+    },
+    vehicle:{
+        color,
+        plate,
+        capacity,
+        vehicleType
     }
- };
+  }
 
-module.exports.logoutCaptain = async (req, res, next) => {
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];
+  if(req.file){
+    updateData.profileImage = `/uploads/captain/${req.file.filename}`;
+   
+  }
+
+  const captain = await captainModel.findByIdAndUpdate(
+    captainId,
+    updateData,
+    { new : true}
+  );
+
+  res.status(200).json({captain});
+  }catch(error){
+      res.status(400).json({message:error.message});
+  }
+
+
+ }
+  
+
+module.exports.logoutCaptain = async (req, res) => {
+    const token = req.cookies.token  
 
     await blackListTokenModel.create({ token });
 
@@ -141,7 +160,7 @@ module.exports.logoutCaptain = async (req, res, next) => {
         socketId: null
     });
 
-    res.clearCookie('token');
+    res.clearCookie('token',{httpOnly:true});
 
     res.status(200).json({ message:'Logout successfully'});
 }

@@ -3,7 +3,9 @@ import profileimg from '../assets/download.png'
 import upi from '../assets/upi.webp';
 
 const RidePopUp = (props) => {
- console.log('props',props.ride)
+
+const profileImg = props.ride?.user.profileImage?`${import.meta.env.VITE_BASE_URL}${props.ride.user.profileImage}`:profileimg;
+ 
     return (
         <div>
             <h5 className='p-1 text-center w-[93%] absolute top-0'
@@ -14,7 +16,7 @@ const RidePopUp = (props) => {
                 <div className='flex items-center gap-3 '>
                     <img
                         className='h-10 w-10 rounded-full '
-                        src={profileimg} alt="" />
+                        src={profileImg} alt="" />
                     <h2 className='text-lg font-medium'>{props.ride?.user.fullname.firstname+" "+props.ride?.user.fullname.lastname}</h2>
                 </div>
                 <h5 className='text-lg font-semibold'>2.0 KM</h5>
@@ -56,7 +58,7 @@ const RidePopUp = (props) => {
                         onClick={() => {
                             props.setRidePopupPanel(false)
                         }}
-                        className='mt-4 bg-gray-300 font-semibold p-3 px-10 rounded-lg text-gray-700'>Ignore</button>
+                        className='mt-4 bg-gray-300 font-semibold p-3 px-10 rounded-lg text-gray-700 cursor-pointer'>Ignore</button>
 
 
                     <button
@@ -65,7 +67,7 @@ const RidePopUp = (props) => {
                          
                             props.confirmRide();
                         }}
-                        className='mt-5 bg-green-600 font-semibold p-3 px-10 rounded-lg text-white'>Accept</button>
+                        className='mt-5 bg-green-600 font-semibold p-3 px-10 rounded-lg text-white cursor-pointer'>Accept</button>
 
                    
                     </div>

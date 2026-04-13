@@ -13,6 +13,7 @@ const UserSignup = () => {
   const [ password, setPassword ]= useState('');
   const [ firstName, setFitstName ] = useState('');
   const [ lastName, setLastName] = useState('');
+  const [ mobileno , setMobileno] = useState('');
  
   const [serverError, setServerError] = useState('');
 
@@ -29,11 +30,14 @@ const UserSignup = () => {
           lastname:lastName
         },
         email:email,
-        password:password
+        password:password,
+        mobileno:mobileno
       }
       
       try{
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser)
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser,{
+        withCredentials:true
+      })
     
       if(response.status === 201 ){
         const data = response.data;
@@ -43,10 +47,11 @@ const UserSignup = () => {
     fullname: {
       firstname: user.fullname.firstname,
       lastname: user.fullname.lastname
-    }
+    },
+    mobileno:user.mobileno
   });
      
-        localStorage.setItem('token',data.token);
+        
      
          toast.success("Registration successful!", {
           position: "top-center",
@@ -82,7 +87,8 @@ const UserSignup = () => {
     }
      }
   return (
-    <div className='p-7 flex flex-col justify-between'>
+      <div className='h-screen py-15 sm:bg-gray-200  '>
+    <div className='p-7 flex flex-col justify-between max-w-lg mx-auto bg-white shadow'>
       <div>            
          <div className="logo flex items-center mb-10">
                        <FaGripfire className='text-[35px] text-red-500 '/>
@@ -144,21 +150,36 @@ const UserSignup = () => {
                    }}
                    className='bg-[#eeeeee] rounded px-4 py-2  w-full text-lg mb-5 placeholder:text-same'
                    />
+
+                   <h3 className='text-base font-medium mb-2'>Enter your Mobile No.</h3>
+                   <input required
+                   inputMode="numeric"
+                   value={mobileno}
+                  
+
+                     type='tel'
+                     className='bg-[#eeeeee] rounded px-4 py-2 w-full text-lg mb-5 placeholder:text-same'
+                     onChange={(e)=>{
+                       const value = e.target.value.replace(/\D/g, "");
+                           if (value.length <= 10) {
+                       setMobileno(value);
+                      } }}
+                     />
                      {serverError && (
     <p className="text-sm text-red-500 mb-3">{serverError}</p>
   )}
                    <button
-                   className='bg-[#111] text-white font-semibold  px-4 py-2 w-full '
+                   className='bg-[#111] text-white font-semibold  px-4 py-2 mb-2 w-full cursor-pointer'
+                   
                    >Create account</button>
-               <p className='text-center mb-10'>Already have a account?<Link to='/login' className='text-blue-600 '>Login here</Link></p> 
+               <p className='text-center mb-4'>Already have a account? <Link to='/login' className='text-blue-600 text-lg font-semibold'>Login here</Link></p> 
                </form>
                </div>
        
                <div>
-                   <p className='text-[10px] leading-tight'>By proceeding, you consent to get calls, WhatsApp or SMS messages,
-including by automated means, from Aber and its affiliates to number
-provided</p>
+ 
                </div>
+           </div>
            </div>
   )
 }

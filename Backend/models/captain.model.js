@@ -12,7 +12,12 @@ const captainSchema = new mongoose.Schema({
         lastname: {
             type: String,
             minlength: [3, 'lastname must be at least 3 characters long'],
+            default: undefined
         }
+    },
+    mobileno:{
+    type:String,
+    required:true
     },
     email: {
         type: String,
@@ -39,6 +44,26 @@ const captainSchema = new mongoose.Schema({
         enum: ['active', "inactive"],
         default: 'inactive',
     },
+    rating: {
+        type: Number,
+        default: 0
+    },
+    numReviews: {
+        type : Number,
+        default :0
+    },
+    reviews:[
+        {
+       rating: {
+        type: Number,
+        required: true
+       },
+       comment: {
+        type: String,
+        default: ''
+       }
+    }
+    ],
     vehicle: {
         color: {
             type: String,
@@ -76,6 +101,7 @@ const captainSchema = new mongoose.Schema({
     
 
     },
+
     totalEarnings:{
         type: Number,
         default:0

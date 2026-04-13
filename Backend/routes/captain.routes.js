@@ -2,6 +2,7 @@ const captainController=require('../controllers/captain.controller');
 const express= require('express');
 const router = express.Router();
 const { body } = require("express-validator");
+const createUpload = require('../middleware/upload.middleware')
 
 const authMiddleware = require('../middleware/auth.middleware');
 
@@ -25,10 +26,9 @@ router.post('/login',[
 )
 
 router.get('/profile', authMiddleware.authCaptain, captainController.getCaptainProfile);
-router.patch('/profile', authMiddleware.authCaptain, captainController.updateCaptainProfile);
-
+ 
 router.get('/logout', authMiddleware.authCaptain, captainController.logoutCaptain);
 
-
+router.put('/update-profile',authMiddleware.authCaptain,createUpload('captain').single('profileImage'), captainController.updateCaptainProfile);
 
 module.exports = router;

@@ -8,25 +8,22 @@ const UserProtectWrapper = ({
     children
 }) => {
 
-     const token=localStorage.getItem('token');
+     
      const navigate = useNavigate();
      const { user, setUser } = useContext(UserDataContext);
      const [ isLoading, setIsLoading ] = useState(true);
 
 
      useEffect(()=>{
-      if(!token){
-        navigate('/login');
-        return;
-     }
+      
     
     axios.get(`${import.meta.env.VITE_BASE_URL}/users/profile`,{
-         headers:{
-          Authorization: `Bearer ${token}`
-         }  
+         
+   withCredentials: true
+
     }).then(response =>{
       if (response.status === 200){
-        console.log(response)
+        
         setUser(response.data);
         setIsLoading(false);
       }
@@ -36,7 +33,7 @@ const UserProtectWrapper = ({
       navigate('/login');
     })
     
-    },[token])
+    },[])
 
     if (isLoading) {
   return (

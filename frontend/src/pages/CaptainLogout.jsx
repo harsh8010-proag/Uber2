@@ -9,9 +9,7 @@ export const CaptainLogout = () => {
     
      useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/captains/logout`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
+        withCredentials: true
     }).then((response) => {
         if (response.status === 200) {
             localStorage.removeItem('captain-token');
@@ -20,7 +18,7 @@ export const CaptainLogout = () => {
                                           autoClose: 2000,
                                           theme: "colored",
                                         });
-            navigate('/captain-login')
+            navigate('/')
         }
     })
      }, []);

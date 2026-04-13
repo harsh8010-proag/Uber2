@@ -31,7 +31,7 @@ module.exports.registerUser = async (req, res) => {
     const token = user.generateAuthToken();
     res.cookie('token',token,{
   httpOnly: true,
-  sameSite: "Lax",
+  sameSite: "none",
   secure: false
 })
 
@@ -69,7 +69,7 @@ module.exports.loginUser =async (req, res)=>{
 
     res.cookie('token', token ,{
   httpOnly: true,
-  sameSite: "Lax",
+  sameSite: "none",
   secure: false
 });
 

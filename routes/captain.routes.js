@@ -1,9 +1,10 @@
-const captainController=require('../controllers/captain.controller')
+const captainController=require('../controllers/captain.controller');
 const express= require('express');
 const router = express.Router();
 const { body } = require("express-validator");
+const createUpload = require('../middleware/upload.middleware')
 
-const authMiddleware = require('../middleware/auth.middleware')
+const authMiddleware = require('../middleware/auth.middleware');
 
 router.post('/register',[
     body('email').isEmail().withMessage('Invalid Email'),
@@ -12,9 +13,7 @@ router.post('/register',[
     body('vehicle.color').isLength({ min: 3 }).withMessage('Color must be at least 3 character long'),
     body('vehicle.plate').isLength({ min: 3 }).withMessage('plate must be at least 3 character long'),
     body('vehicle.capacity').isInt({ min: 1 }).withMessage('Capacity must be at least 3 character long'),
-   body('vehicle.vehicleType')
-  .isIn(['car', 'motorcycle', 'auto'])
-  .withMessage('Vehicle type must be car, motorcycle, or auto')],
+    body('vehicle.vehicleType').isIn(['car', 'moto', 'auto']).withMessage('Vehicle type must be car, motorcycle, or auto')],
 
  captainController.registerCaptain
  )      
@@ -27,9 +26,9 @@ router.post('/login',[
 )
 
 router.get('/profile', authMiddleware.authCaptain, captainController.getCaptainProfile);
-
+ 
 router.get('/logout', authMiddleware.authCaptain, captainController.logoutCaptain);
 
-
+router.put('/update-profile',authMiddleware.authCaptain,createUpload('captain').single('profileImage'), captainController.updateCaptainProfile);
 
 module.exports = router;

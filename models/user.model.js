@@ -15,6 +15,14 @@ const userSchema = new mongoose.Schema({
             minlength:[3, 'last name must be at least 3 charachters long']
        }
     },
+    mobileno:{
+     type:String,
+     required:true
+    },
+    profileImage:{
+        type:String,
+        default:''
+    },
     email:{
         type:String,
         required:true,
@@ -41,9 +49,9 @@ userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password,this.password);
 }
 
-userSchema.statics.hashedPassword = async function (password) {
+userSchema.statics.hashPassword = async function (password) {
     return await bcrypt.hash(password,10);
 }
 
 const userModel = mongoose.model('user',userSchema);
-module.exports =userModel;
+module.exports = userModel;

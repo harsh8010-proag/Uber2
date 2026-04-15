@@ -2,11 +2,14 @@ const captainModel = require('../models/captain.model');
 
 module.exports.createCaptain = async({
     firstname, lastname, email, password,
-    color, plate, capacity , vehicleType
+    color, plate, capacity , vehicleType, mobileno
 })=>{
-    if(!firstname || !email || !password || !color || !capacity || !vehicleType || !plate){
+    console.log('firstname',firstname);
+    console.log('mobileno',mobileno)
+    if(!firstname || !email || !password || !color || !capacity || !vehicleType || !plate || !mobileno){
         throw new Error('All fields are required');
     }
+    
     const captain = captainModel.create({
         fullname:{
             firstname,
@@ -14,6 +17,7 @@ module.exports.createCaptain = async({
         },
         email,
         password,
+        mobileno,
         vehicle:{
             color,
             plate,
@@ -22,4 +26,6 @@ module.exports.createCaptain = async({
         }
     })
     return captain;
-    }
+};
+
+ 

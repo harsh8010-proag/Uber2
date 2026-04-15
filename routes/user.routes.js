@@ -3,6 +3,8 @@ const router= express.Router();
 const { body } = require('express-validator');
 const userController = require('../controllers/user.controller');
 const authMiddleware = require('../middleware/auth.middleware');
+const createUpload = require('../middleware/upload.middleware');
+const reviewController = require('../controllers/review.controller')
 
 router.post('/register',[
     body('email').isEmail().withMessage('Invalid Email'),
@@ -19,8 +21,9 @@ router.post('/login',[
  userController.loginUser     
 );
 
-
+router.post('/review',authMiddleware.authUser,reviewController.addReview)
 router.get('/profile',authMiddleware.authUser,userController.getUserProfile);
+router.put('/profile-edit',authMiddleware.authUser,createUpload('user').single('profileImage'),userController.updateUserProfile)
 router.get('/logout', authMiddleware.authUser, userController.logoutUser);
 
 

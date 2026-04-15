@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react'
-import { FaGripfire } from 'react-icons/fa';
+// import { FaGripfire } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import 'remixicon/fonts/remixicon.css';
 import { SocketContext } from '../contaxt/SocketContext';
 import LiveTracking from '../components/LiveTracking';
 import upi from '../assets/upi.webp';
-import { ToastContainer, toast } from "react-toastify";
-import MakePayment from '../components/makePayment';
+// import { ToastContainer, toast } from "react-toastify";
+// import MakePayment from '../components/makePayment';
 import axios from 'axios';
 import { useEffect } from 'react';
  

@@ -7,7 +7,7 @@ let io;
 function initializeSocket(server){
     io = socketIo(server ,{
         cors:{
-            origin: 'http://localhost:5173',
+             origin:['http://localhost:5173','https://aber-ride-booking-system.vercel.app'],
             methods: [ 'GET' , 'POST']
         }
     });

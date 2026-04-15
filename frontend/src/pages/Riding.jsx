@@ -6,7 +6,7 @@ import { SocketContext } from '../contaxt/SocketContext';
 import LiveTracking from '../components/LiveTracking';
 import upi from '../assets/upi.webp';
 import { ToastContainer, toast } from "react-toastify";
-import MakePayment from '../components/makePayment';
+ 
 import axios from 'axios';
 
 

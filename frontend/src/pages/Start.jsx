@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import heroimg from '../assets/ledywithstuf.webp'
 import driverimg from '../assets/driverwitpacenger.svg'
-import Footer from '../components/footer';
+import Footer from '../components/Footer';
 const Start = () => {
   return (
     <div className="min-h-screen w-full bg-cover bg-center relative">

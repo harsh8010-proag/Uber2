@@ -45,9 +45,11 @@
     await captain.save();
     const token = captain.generateAuthToken();
 
-    res.cookie('token',token,{
-        httpOnly:true
-    })
+res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
+});
 
     res.status(201).json({captain});
  }
@@ -87,9 +89,11 @@ if(!isMatch){
 } 
 const token = captain.generateAuthToken();
 
-    res.cookie('token',token,{
-         httpOnly:true
-         });
+res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
+});
 
     res.status(200).json({
      captain

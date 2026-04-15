@@ -67,10 +67,10 @@ module.exports.loginUser =async (req, res)=>{
 
     const token = user.generateAuthToken();
 
-    res.cookie('token', token ,{
+res.cookie('token', token, {
   httpOnly: true,
-  sameSite: "none",
-  secure: false
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
 });
 
     res.status(200).json({ user });   
@@ -117,10 +117,10 @@ module.exports.logoutUser = async (req, res) => {
     await blackListTokenModel.create({ token });
     }
     
-    res.clearCookie('token',{
+res.cookie('token', token, {
   httpOnly: true,
-  sameSite: "Lax",
-  secure: false
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
 });
     res.status(200).json({ message: 'Logged out' });
  

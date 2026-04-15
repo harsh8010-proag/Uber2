@@ -4,7 +4,7 @@ import Home from './pages/Home';
 import UserLogin from './pages/UserLogin';
 import UserSignup from './pages/UserSignup';
 import Captainlogin from './pages/Captainlogin';
-import Captainsignup from './pages/Captainsignup';
+import Captainsignup from './pages/CaptainSignup';
 import UserContext, { UserDataContext } from './contaxt/UserContext';
 import Start from './pages/Start';
 import UserProtectWrapper from './pages/UserProtectWrapper';

@@ -2,6 +2,7 @@ const dotenv         = require('dotenv');
                         dotenv.config();
 const express        = require('express');
 const path           = require('path');
+const fs = require('fs')
 const cors           = require('cors');
 const app            = express();
 const cookieParser   = require('cookie-parser');
@@ -11,8 +12,21 @@ const captainRoutes  = require('./routes/captain.routes');
 const mapRoutes      = require('./routes/maps.routes');
 const rideRoutes     = require('./routes/ride.routes');
  const ridehistory   = require('./routes/ridehistory.routes');
-const contact        = require('./routes/contact.routes')
+const contact        = require('./routes/contact.routes');
  
+
+const userDir = path.join(__dirname, "uploads/user");
+const captainDir = path.join(__dirname, "uploads/captain");
+
+if (!fs.existsSync(userDir)) {
+  fs.mkdirSync(userDir, { recursive: true });
+}
+
+if (!fs.existsSync(captainDir)) {
+  fs.mkdirSync(captainDir, { recursive: true });
+}
+
+
 connectToDb();
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));

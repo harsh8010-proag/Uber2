@@ -29,11 +29,11 @@ module.exports.registerUser = async (req, res) => {
     });
 
     const token = user.generateAuthToken();
-    res.cookie('token',token,{
+res.cookie('token', token, {
   httpOnly: true,
-  sameSite: "none",
-  secure: false
-})
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
+});
 
     res.status(201).json({  user });
 

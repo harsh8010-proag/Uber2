@@ -36,7 +36,7 @@ const captainSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String,
-        default: '',
+        default: '/uploads/default.png',
     },
 
     status: {

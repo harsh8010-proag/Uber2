@@ -8,7 +8,7 @@ const UserProfile = () => {
     const { user } = useContext(UserDataContext)
     const navigate = useNavigate();
 
-    const profileImage = user.profileImage?`${import.meta.env.VITE_BASE_URL}${user.profileImage}`: profile;
+    const profileImage = user?.profileImage?`${import.meta.env.VITE_BASE_URL}${user.profileImage}`: profile;
 
     return (
         <div>

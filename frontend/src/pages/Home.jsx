@@ -34,8 +34,8 @@ const home = () => {
   const [pendingRide, setPendingRide] = useState('');
 
 
-  const [vehicleFound, setVehicleFound] = useState(false);
-  const [waitingForDriver, setWaitingForDriver] = useState(false);
+  const [vehicleFound, setVehicleFound]          = useState(false);
+  const [waitingForDriver, setWaitingForDriver]  = useState(false);
 
   const vehiclePanelRef = useRef(null);
   const confirmRidePanelRef = useRef(null);
@@ -48,7 +48,8 @@ const home = () => {
   const { socket } = useContext(SocketContext);
   const { user } = useContext(UserDataContext);
 
- const profileImage = user.profileImage?`${import.meta.env.VITE_BASE_URL}${user.profileImage}`: profileimg ;
+ const profileImage = user?.profileImage?`${import.meta.env.VITE_BASE_URL}${user.profileImage}`: profileimg ;
+ console.log(`${import.meta.env.VITE_BASE_URL}${user.profileImage}`)
   useEffect(() => {
     socket.emit("join", { userType: "user", userId: user._id });
   }, [user]);

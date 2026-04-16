@@ -8,7 +8,7 @@ const WaitingForDriver = (props) => {
    
  const currentAvatar = captain?.profileImage
   ? `${import.meta.env.VITE_BASE_URL}${captain.profileImage}`
-  : profile;
+  : profileimg;
                                                                                 
    
     return (

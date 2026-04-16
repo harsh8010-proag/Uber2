@@ -10,7 +10,7 @@ const UserEditProfile = () => {
     const [lastname, setLastname] = useState(user?.fullname?.lastname || '')
     const [email, setEmail] = useState(user?.email || '')
     const [image, setImage] = useState(null);
-    const [preview, setPreview] = useState(user?.profileImage?`${import.meta.env.VITE_BASE_URL}${user.profileImage}`:profile);
+    const [preview, setPreview] = useState(user?.profileImage?`${import.meta.env.VITE_BASE_URL}${user.profileImage}`:profileimg);
 
     const navigate = useNavigate()
 

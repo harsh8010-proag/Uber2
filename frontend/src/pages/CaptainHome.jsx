@@ -109,7 +109,7 @@ useEffect(() => {
 
       });
       const rideData = response.data;
-      console.log('data',rideData);
+     
       setRide(rideData);
      
       if(rideData.status === 'pending'){  

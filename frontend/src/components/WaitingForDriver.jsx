@@ -1,6 +1,6 @@
 import React from 'react'
 import upiimg from '../assets/upi.webp'
-import profile from '../assets/download.png'
+import profileimg from '../assets/download.png'
 
 const WaitingForDriver = (props) => {
 
@@ -22,6 +22,7 @@ const WaitingForDriver = (props) => {
     <img
       className="h-14 w-14 rounded-full object-cover border"
       src= {currentAvatar}
+      onError={(e) => (e.target.src = profileimg)}
       alt="driver"
     />
 

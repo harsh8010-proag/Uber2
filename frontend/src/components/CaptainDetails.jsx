@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CaptainDataContext } from '../contaxt/CaptanContext';
-import profile from '../assets/download.png';
+import profileimg from '../assets/download.png';
 import { SocketContext } from '../contaxt/SocketContext';
 import { toast } from 'react-toastify';
 
@@ -63,6 +63,7 @@ const CaptainDetails = () => {
               className="h-12 w-12 md:h-14 md:w-14 rounded-full object-cover border"
               src={profileSrc}
               alt="Profile"
+              onError={(e) => (e.target.src = profileimg)}
             />
             <div>
               <h4 className="text-lg md:text-xl font-semibold text-gray-800">

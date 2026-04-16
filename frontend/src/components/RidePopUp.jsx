@@ -16,7 +16,9 @@ const profileImg = props.ride?.user.profileImage?`${import.meta.env.VITE_BASE_UR
                 <div className='flex items-center gap-3 '>
                     <img
                         className='h-10 w-10 rounded-full '
-                        src={profileImg} alt="" />
+                        src={profileImg}
+                        onError={(e) => (e.target.src = profileimg)}
+                        alt="" />
                     <h2 className='text-lg font-medium'>{props.ride?.user.fullname.firstname+" "+props.ride?.user.fullname.lastname}</h2>
                 </div>
                 <h5 className='text-lg font-semibold'>2.0 KM</h5>

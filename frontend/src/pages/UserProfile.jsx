@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link , useNavigate } from 'react-router-dom'
 import { UserDataContext } from '../contaxt/UserContext'
-import profile from '../assets/download.png'
+import profileimg from '../assets/download.png'
 import UserRidehistory from '../components/UserRidehistory'
 
 const UserProfile = () => {
@@ -24,6 +24,7 @@ const UserProfile = () => {
                 <div className='flex gap-5 items-center mb-2'>
                     <img
                         src={profileImage}
+                        onError={(e) => (e.target.src = profileimg)}
                         alt="profile"
                         className="h-15 w-15 rounded-full object-cover border-4 border-white shadow-lg"
                     />

@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserDataContext } from '../contaxt/UserContext';
 import axios from 'axios';
-import profile from '../assets/download.png'
+import profileimg from '../assets/download.png'
 
 const UserEditProfile = () => {
     const { user, setUser } = useContext(UserDataContext)
@@ -72,6 +72,7 @@ const UserEditProfile = () => {
                         <div className='relative'>
                             <img
                                 src={preview}
+                                onError={(e) => (e.target.src = profileimg)}
                                 alt="Profile Preview"
                                 className='h-24 w-24 rounded-full object-cover border-4 border-gray-200'
                             />

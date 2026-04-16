@@ -2,7 +2,7 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CaptainDataContext } from '../contaxt/CaptanContext';
 import axios from 'axios';
-import profile from '../assets/download.png';
+import profileimg from '../assets/download.png';
 import 'remixicon/fonts/remixicon.css';
 import CaptainRidehistory from '../components/CaptainRidehistory'
 
@@ -48,6 +48,7 @@ const CaptainProfile = () => {
           <div className='flex gap-5 items-center mb-2'>
             <img
               src={currentAvatar}
+              onError={(e) => (e.target.src = profileimg)}
               alt="Profile"
               className="h-15 w-15 rounded-full object-cover border-4 border-white shadow-lg"
             />

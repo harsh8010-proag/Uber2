@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { CaptainDataContext } from "../contaxt/CaptanContext";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import profileimg from '../assets/download.png'
 
 const CaptainEdit = () => {
 
@@ -72,6 +73,7 @@ const CaptainEdit = () => {
       <img
         src={preview}
         alt="Profile"
+        onError={(e) => (e.target.src = profileimg)}
         className="h-24 w-24 rounded-full object-cover border-4 border-white shadow-lg"
       />
 

@@ -383,6 +383,7 @@ const home = () => {
     <img 
     className='h-8 w-8 rounded-full object-cover border-2 border-gray-200'
     src={profileImage}
+    onError={(e) => (e.target.src = profileimg)}
     alt='profile'
     />
      

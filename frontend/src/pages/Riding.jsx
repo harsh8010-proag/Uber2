@@ -30,7 +30,7 @@ const Riding = () => {
 
 
     const location = useLocation();
-    const { ride } = location.state;
+    const { ride } = location?.state;
     const { socket } = useContext(SocketContext);
 
     const [rating, setRating] = useState(0);
@@ -167,7 +167,7 @@ useEffect(() => {
             </div>
             <div className=' h-1/2 px-4 flex flex-col justify-center '>
 
-                <p className='text-2xl text-green-700'>Ride complated <i className="ri-checkbox-circle-fill text-lg"></i></p>
+                <p className='text-2xl text-green-700 mt-1'>Ride complated <i className="ri-checkbox-circle-fill text-lg"></i></p>
                 <div className='flex items-center justify-between mt-2'>
                     <img className='h-12' src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg" alt="" />
                     <div className='text-right'>
@@ -178,17 +178,17 @@ useEffect(() => {
                     </div>
                 </div>
 
-                <div className='flex gap-2 justify-between flex-col items-center'>
-                    <div className='w-full mt-5'>
+                <div className='flex  justify-between flex-col items-center'>
+                    <div className='w-full mt-2'>
 
-                        <div className='flex items-center gap-5 p-3 border-b-2'>
+                        <div className='flex items-center gap-4 p-2 border-b-2'>
                             <i className="text-lg ri-map-pin-2-fill"></i>
                             <div>
 
                                 <p className='text-sm -mt-1 text-gray-600'>{rideData?.destination}</p>
                             </div>
                         </div>
-                        <div className='flex items-center gap-5 p-3 border-b-2'>
+                        <div className='flex items-center gap-5 p-2 border-b-2'>
                             {rideData?.paymentMethod === 'cash' ? <i className="text-lg  text-green-700 ri-cash-line "></i> : <img src={upi} alt='upi' className='h-[40px]' />}
                             <div>
                                 <h3 className='text-lg font-medium'>₹{rideData?.fare}</h3>

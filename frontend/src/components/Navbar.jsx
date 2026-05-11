@@ -8,7 +8,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   return (
     <div>
-    <div className='  flex flex-wrap h-[60px] bg-black text-white flex items-center justify-between px-8 '>
+    <div className='flex flex-wrap h-[60px] bg-black text-white flex items-center justify-between px-8 '>
       <div className='flex items-center gap-8'>
         <div className="logo flex text-2xl items-center cursor-pointer " onClick={()=>navigate('/')}>
           <FaGripfire className=' text-red-500 '/>
